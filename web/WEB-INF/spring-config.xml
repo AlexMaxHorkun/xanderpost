@@ -30,7 +30,11 @@
     </bean>
 
     <bean id="PostController" class="xanderpost.web.controller.PostController">
-        <property name="hbm" ref="ORMSessionFactory"  />
+        <property name="postDao" ref="postDao"  />
+    </bean>
+
+    <bean id="postDao" class="xanderpost.entity.PostDaoHbm" >
+        <property name="sessionFactory" ref="ORMSessionFactory"/>
     </bean>
 
 </beans>
