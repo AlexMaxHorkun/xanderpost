@@ -1,8 +1,11 @@
-package xanderpost.entity;
+package xanderpost.repository;
+
+import xanderpost.entity.Post;
 
 import java.util.Collection;
 
 public interface PostDaoInterface {
+
     public Post find(long id);
 
     public Collection<Post> findByTitle(String t);

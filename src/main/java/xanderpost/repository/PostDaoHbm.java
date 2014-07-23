@@ -1,14 +1,15 @@
-package xanderpost.entity;
+package xanderpost.repository;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+import xanderpost.entity.Post;
 
 import java.util.Collection;
 
 @Repository
-public class PostDaoHbm implements PostDaoInterface{
+public class PostDaoHbm implements PostDaoInterface {
     private SessionFactory sessionFactory;
 
     public SessionFactory getSessionFactory() {
