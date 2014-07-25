@@ -32,8 +32,9 @@
         </property>
     </bean>
 
-    <bean id="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+    <bean id="jspViewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
         <property name="basename" value="views"/>
+        <property name="order"><value>2</value></property>
     </bean>
 
     <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
