@@ -40,4 +40,11 @@ public class PostDaoHbm implements PostDaoInterface {
         orm.close();
         return posts;
     }
+
+    public void persist(Post p){
+        Session orm=sessionFactory.openSession();
+        orm.persist(p);
+        orm.flush();
+        orm.close();
+    }
 }

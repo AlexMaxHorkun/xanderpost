@@ -10,6 +10,13 @@ public class Post {
 
     private String text;
 
+    public Post(){}
+
+    public Post(String title, String text){
+        this.text=text;
+        this.title=title;
+    }
+
     public long getId() {
         return id;
     }

@@ -11,4 +11,6 @@ public interface PostDaoInterface {
     public Collection<Post> findByTitle(String t);
 
     public Collection<Post> findAll();
+
+    public void persist(Post p);
 }

@@ -45,6 +45,7 @@
 
     <bean id="xmlView" class="org.springframework.web.servlet.view.xml.MarshallingView">
         <property name="marshaller" ref="xmlMarshaller"/>
+        <property name="contentType" value="application/xml; charset=utf-8"/>
     </bean>
 
     <bean id="xmlMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">
