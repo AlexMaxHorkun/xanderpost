@@ -9,6 +9,7 @@ import org.springframework.web.servlet.view.xml.MarshallingView;
 import xanderpost.entity.Post;
 import xanderpost.repository.PostDaoInterface;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,22 +27,15 @@ public class PostController {
     }
 
     @RequestMapping(value =  "/posts" , method = RequestMethod.GET)
-    public  ModelAndView postsListAction(@RequestHeader("Accept") List<String> acceptHeader){
+    public  ModelAndView postsListAction(@RequestHeader("Accept") String acceptHeader){
         List<Post> posts=(ArrayList<Post>)postDao.findAll();
         ModelAndView response=new ModelAndView();
         response.addObject("posts", posts);
-        View view=null;
         if(acceptHeader.contains("application/json")){
-            MappingJackson2JsonView jsonView=new MappingJackson2JsonView();
-            jsonView.setModelKey("posts");
-            view=jsonView;
             response.setViewName("jsonView");
         }
         else{
-            MarshallingView xmlView=new MarshallingView();
-            xmlView.setModelKey("posts");
-            xmlView.setBeanName("post");
-            view=xmlView;
+            response.setViewName("xmlView");
         }
         return response;
     }

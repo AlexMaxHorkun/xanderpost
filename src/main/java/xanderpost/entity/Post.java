@@ -1,5 +1,8 @@
 package xanderpost.entity;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name="post")
 public class Post {
     private long id;
 

@@ -37,6 +37,24 @@
         <property name="order"><value>2</value></property>
     </bean>
 
+    <bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+        <property name="order" value="1"/>
+    </bean>
+
+    <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
+
+    <bean id="xmlView" class="org.springframework.web.servlet.view.xml.MarshallingView">
+        <property name="marshaller" ref="xmlMarshaller"/>
+    </bean>
+
+    <bean id="xmlMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">
+        <property name="aliases">
+            <props>
+                <prop key="post">xanderpost.entity.Post</prop>
+            </props>
+        </property>
+    </bean>
+
     <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
