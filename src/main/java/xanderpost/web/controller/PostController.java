@@ -26,7 +26,7 @@ public class PostController {
         this.postDao = postDao;
     }
 
-    @RequestMapping(value =  "/posts" , method = RequestMethod.GET)
+    @RequestMapping(value =  "/post" , method = RequestMethod.GET)
     public  ModelAndView postsListAction(@RequestHeader("Accept") String acceptHeader){
         List<Post> posts=(ArrayList<Post>)postDao.findAll();
         ModelAndView response=new ModelAndView();
