@@ -12,7 +12,6 @@ import xanderpost.entity.validation.PostValidator;
 import xanderpost.repository.PostDaoInterface;
 
 import javax.validation.Valid;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
