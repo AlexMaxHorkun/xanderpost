@@ -28,11 +28,6 @@ public class PostController {
         this.postDao = postDao;
     }
 
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new PostValidator());
-    }
-
     @RequestMapping(value =  "/post" , method = RequestMethod.GET, produces = {"application/json", "application/xml"})
     public  ModelAndView postsListAction(){
         List<Post> posts=(ArrayList<Post>)postDao.findAll();
