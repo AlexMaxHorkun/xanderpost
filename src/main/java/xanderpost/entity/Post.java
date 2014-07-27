@@ -1,13 +1,17 @@
 package xanderpost.entity;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-@XmlRootElement(name="post")
 public class Post {
     private long id;
 
+    @NotNull
+    @Size(max = 255, min=3)
     private String title;
 
+    @NotNull
+    @Size(max=4000, min=3)
     private String text;
 
     public Post(){}
