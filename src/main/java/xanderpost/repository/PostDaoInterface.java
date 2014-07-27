@@ -13,4 +13,6 @@ public interface PostDaoInterface {
     public Collection<Post> findAll();
 
     public void persist(Post p);
+
+    public void delete(Post p);
 }

@@ -1,19 +1,13 @@
 package xanderpost.web.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
-import org.springframework.web.servlet.view.xml.MarshallingView;
 import xanderpost.entity.Post;
-import xanderpost.entity.validation.PostValidator;
 import xanderpost.repository.PostDaoInterface;
 
 import javax.validation.Valid;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -30,7 +24,7 @@ public class PostController {
 
     @RequestMapping(value =  "/post" , method = RequestMethod.GET, produces = {"application/json", "application/xml"})
     public  ModelAndView postsListAction(){
-        List<Post> posts=(ArrayList<Post>)postDao.findAll();
+        List<Post> posts=(ArrayList<Post>)getPostDao().findAll();
         ModelAndView response=new ModelAndView();
         response.addObject("posts", posts);
         return response;
@@ -40,6 +34,20 @@ public class PostController {
     public ModelAndView postAddAction( @Valid Post post){
         ModelAndView response=new ModelAndView();
         postDao.persist(post);
+        response.addObject("post",post);
+        return response;
+    }
+
+    @RequestMapping(value="/post/{id}", method = RequestMethod.DELETE, produces = {"application/json", "application/xml"})
+    public ModelAndView postDeleteAction(@PathVariable long id){
+        ModelAndView response=new ModelAndView();
+        Post post=postDao.find(id);
+        if(post != null){
+            postDao.delete(post);
+        }
+        else{
+            throw new InvalidParameterException("Cannot find post with id = "+id);
+        }
         response.addObject("post",post);
         return response;
     }

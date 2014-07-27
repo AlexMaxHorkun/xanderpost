@@ -21,7 +21,7 @@ public class PostDaoHbm implements PostDaoInterface {
     }
 
     public Post find(long id){
-        Session orm=sessionFactory.openSession();
+        Session orm=getSessionFactory().openSession();
         Post post=(Post)orm.get(Post.class, id);
         orm.close();
         return post;
@@ -44,6 +44,13 @@ public class PostDaoHbm implements PostDaoInterface {
     public void persist(Post p){
         Session orm=sessionFactory.openSession();
         orm.persist(p);
+        orm.flush();
+        orm.close();
+    }
+
+    public void delete(Post p){
+        Session orm=sessionFactory.openSession();
+        orm.delete(p);
         orm.flush();
         orm.close();
     }
