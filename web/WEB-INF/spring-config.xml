@@ -32,27 +32,39 @@
         </property>
     </bean>
 
-    <bean id="jspViewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
-        <property name="basename" value="views"/>
-        <property name="order"><value>2</value></property>
-    </bean>
-
-    <bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
-        <property name="order" value="1"/>
-    </bean>
-
-    <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
-
-    <bean id="xmlView" class="org.springframework.web.servlet.view.xml.MarshallingView">
-        <property name="marshaller" ref="xmlMarshaller"/>
-        <property name="contentType" value="application/xml; charset=utf-8"/>
-    </bean>
-
     <bean id="xmlMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">
         <property name="aliases">
             <props>
                 <prop key="post">xanderpost.entity.Post</prop>
             </props>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="mediaTypes">
+            <map>
+                <entry key="html" value="text/html"/>
+                <entry key="json" value="application/json"/>
+                <entry key="xml" value="application/xml"/>
+            </map>
+        </property>
+        <property name="viewResolvers">
+            <list>
+                <bean class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
+                <bean class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+                    <property name="basename" value="views"/>
+                </bean>
+            </list>
+        </property>
+        <property name="defaultViews">
+            <list>
+                <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
+
+                <bean id="xmlView" class="org.springframework.web.servlet.view.xml.MarshallingView">
+                    <property name="marshaller" ref="xmlMarshaller"/>
+                    <property name="contentType" value="application/xml; charset=utf-8"/>
+                </bean>
+            </list>
         </property>
     </bean>
 

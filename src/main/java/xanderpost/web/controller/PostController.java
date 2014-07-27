@@ -33,31 +33,19 @@ public class PostController {
         binder.setValidator(new PostValidator());
     }
 
-    @RequestMapping(value =  "/post" , method = RequestMethod.GET)
-    public  ModelAndView postsListAction(@RequestHeader("Accept") String acceptHeader){
+    @RequestMapping(value =  "/post" , method = RequestMethod.GET, produces = {"application/json", "application/xml"})
+    public  ModelAndView postsListAction(){
         List<Post> posts=(ArrayList<Post>)postDao.findAll();
         ModelAndView response=new ModelAndView();
         response.addObject("posts", posts);
-        if(acceptHeader.contains("application/json")){
-            response.setViewName("jsonView");
-        }
-        else{
-            response.setViewName("xmlView");
-        }
         return response;
     }
 
-    @RequestMapping(value="/post", method = RequestMethod.POST)
-    public ModelAndView postAddAction(@RequestHeader("Accept") String acceptHeader, @Valid Post post){
+    @RequestMapping(value="/post", method = RequestMethod.POST, produces = {"application/json", "application/xml"})
+    public ModelAndView postAddAction( @Valid Post post){
         ModelAndView response=new ModelAndView();
         postDao.persist(post);
         response.addObject("post",post);
-        if(acceptHeader.contains("application/json")){
-            response.setViewName("jsonView");
-        }
-        else{
-            response.setViewName("xmlView");
-        }
         return response;
     }
 }
