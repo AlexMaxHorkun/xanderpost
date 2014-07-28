@@ -1,7 +1,6 @@
 package xanderpost.web.controller;
 
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/posts")
 public class PostController {
     private PostDaoInterface postDao;
 
@@ -35,7 +35,7 @@ public class PostController {
         this.validator = validator;
     }
 
-    @RequestMapping(value =  "/post" , method = RequestMethod.GET, produces = {"application/json", "application/xml"})
+    @RequestMapping( method = RequestMethod.GET, produces = {"application/json", "application/xml"})
     public  ModelAndView postsListAction(){
         List<Post> posts=(ArrayList<Post>)getPostDao().findAll();
         ModelAndView response=new ModelAndView();
@@ -43,7 +43,7 @@ public class PostController {
         return response;
     }
 
-    @RequestMapping(value="/post", method = RequestMethod.POST, produces = {"application/json", "application/xml"})
+    @RequestMapping( method = RequestMethod.POST, produces = {"application/json", "application/xml"})
     public ModelAndView postAddAction( @Valid Post post){
         ModelAndView response=new ModelAndView();
         postDao.persist(post);
@@ -51,7 +51,7 @@ public class PostController {
         return response;
     }
 
-    @RequestMapping(value="/post/{id}", method = RequestMethod.DELETE, produces = {"application/json", "application/xml"})
+    @RequestMapping(value="/{id}", method = RequestMethod.DELETE, produces = {"application/json", "application/xml"})
     public ModelAndView postDeleteAction(@PathVariable long id){
         ModelAndView response=new ModelAndView();
         Post post=postDao.find(id);
@@ -65,16 +65,9 @@ public class PostController {
         return response;
     }
 
-    @RequestMapping(value="/post/{post}", method = RequestMethod.PATCH, produces = {"application/json", "application/xml"})
-    public ModelAndView postEditAction( @ModelAttribute("post") Post post, BindingResult binding, ModelAndView response){
-        /*Post post=getPostDao().find(id);
-        if(post != null){
+    @RequestMapping(value="/{id}", method = RequestMethod.PATCH, produces = {"application/json", "application/xml"})
+    public ModelAndView postEditAction( @PathVariable("id") Post post, BindingResult binding, ModelAndView response){
 
-        }
-        else{
-            throw new InvalidParameterException("Wrong post id given");
-        }*/
-        //response.addObject("post",post);
         return response;
     }
 }

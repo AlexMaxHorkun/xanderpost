@@ -89,7 +89,7 @@
           class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
             <set>
-                <ref bean="idToPostConverter"/>
+                <ref bean="stringToPostConverter"/>
             </set>
         </property>
     </bean>
@@ -108,7 +108,7 @@
         <aop:advisor advice-ref="txAdvice" pointcut-ref="repositoryOperation"/>
     </aop:config>
 
-    <bean id="idToPostConverter" class="xanderpost.converter.IdToPostConverter">
+    <bean id="stringToPostConverter" class="xanderpost.converter.StringToPostConverter">
         <property name="postDao" ref="postDao"/>
     </bean>
 
