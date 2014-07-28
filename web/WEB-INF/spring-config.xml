@@ -85,8 +85,18 @@
         </tx:attributes>
     </tx:advice>
 
+    <bean id="conversionService"
+          class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <ref bean="idToPostConverter"/>
+            </set>
+        </property>
+    </bean>
+
     <bean id="PostController" class="xanderpost.web.controller.PostController">
         <property name="postDao" ref="postDao"  />
+        <property name="validator" ref="validator"/>
     </bean>
 
     <bean id="postDao" class="xanderpost.repository.PostDaoHbm" >
@@ -97,5 +107,9 @@
         <aop:pointcut id="repositoryOperation" expression="execution(* xanderpost.repository.*.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="repositoryOperation"/>
     </aop:config>
+
+    <bean id="idToPostConverter" class="xanderpost.converter.IdToPostConverter">
+        <property name="postDao" ref="postDao"/>
+    </bean>
 
 </beans>

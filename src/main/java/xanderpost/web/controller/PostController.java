@@ -1,5 +1,8 @@
 package xanderpost.web.controller;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import xanderpost.entity.Post;
@@ -14,12 +17,22 @@ import java.util.List;
 public class PostController {
     private PostDaoInterface postDao;
 
+    private Validator validator;
+
     public PostDaoInterface getPostDao() {
         return postDao;
     }
 
     public void setPostDao(PostDaoInterface postDao) {
         this.postDao = postDao;
+    }
+
+    public Validator getValidator() {
+        return validator;
+    }
+
+    public void setValidator(Validator validator) {
+        this.validator = validator;
     }
 
     @RequestMapping(value =  "/post" , method = RequestMethod.GET, produces = {"application/json", "application/xml"})
@@ -49,6 +62,19 @@ public class PostController {
             throw new InvalidParameterException("Cannot find post with id = "+id);
         }
         response.addObject("post",post);
+        return response;
+    }
+
+    @RequestMapping(value="/post/{post}", method = RequestMethod.PATCH, produces = {"application/json", "application/xml"})
+    public ModelAndView postEditAction( @ModelAttribute("post") Post post, BindingResult binding, ModelAndView response){
+        /*Post post=getPostDao().find(id);
+        if(post != null){
+
+        }
+        else{
+            throw new InvalidParameterException("Wrong post id given");
+        }*/
+        //response.addObject("post",post);
         return response;
     }
 }

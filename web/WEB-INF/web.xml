@@ -23,6 +23,16 @@
         <param-value>/WEB-INF/spring-config.xml</param-value>
     </context-param>
 
+    <filter>
+        <filter-name>httpPutFormFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>httpPutFormFilter</filter-name>
+        <servlet-name>spring</servlet-name>
+    </filter-mapping>
+
     <servlet>
         <servlet-name>spring</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
