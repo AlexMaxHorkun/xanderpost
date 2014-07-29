@@ -65,9 +65,14 @@ public class PostController {
         return response;
     }
 
-    @RequestMapping(value="/{id}", method = RequestMethod.PATCH, produces = {"application/json", "application/xml"})
-    public ModelAndView postEditAction( @PathVariable("id") Post post, BindingResult binding, ModelAndView response){
-
+    @RequestMapping(value="/{post}", method = RequestMethod.PATCH, produces = {"application/json", "application/xml"})
+    public ModelAndView postEditAction( @ModelAttribute Post post, BindingResult binding, ModelAndView response){
+        if(post.getId() > 0){
+            getPostDao().save(post);
+        }
+        else{
+            throw new InvalidParameterException("Post with such ID is not found");
+        }
         return response;
     }
 }

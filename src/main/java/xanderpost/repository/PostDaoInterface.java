@@ -15,4 +15,6 @@ public interface PostDaoInterface {
     public void persist(Post p);
 
     public void delete(Post p);
+
+    public void save(Post p);
 }
