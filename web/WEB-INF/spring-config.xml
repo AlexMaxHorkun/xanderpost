@@ -98,13 +98,13 @@
 
     <bean id="PostController" class="xanderpost.web.controller.PostController">
         <property name="postDao" ref="postDao"  />
-        <property name="validator" ref="validator"/>
     </bean>
 
     <bean id="postDao" class="xanderpost.repository.PostDaoHbm" >
         <property name="sessionFactory" ref="ORMSessionFactory"/>
     </bean>
 
+    <aop:aspectj-autoproxy/>
     <aop:config>
         <aop:pointcut id="repositoryOperation" expression="execution(* xanderpost.repository.*.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="repositoryOperation"/>
