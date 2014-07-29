@@ -17,22 +17,12 @@ import java.util.List;
 public class PostController {
     private PostDaoInterface postDao;
 
-    private Validator validator;
-
     public PostDaoInterface getPostDao() {
         return postDao;
     }
 
     public void setPostDao(PostDaoInterface postDao) {
         this.postDao = postDao;
-    }
-
-    public Validator getValidator() {
-        return validator;
-    }
-
-    public void setValidator(Validator validator) {
-        this.validator = validator;
     }
 
     @RequestMapping( method = RequestMethod.GET, produces = {"application/json", "application/xml"})
