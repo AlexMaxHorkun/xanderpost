@@ -67,7 +67,7 @@ public class PostController {
 
     @RequestMapping(value="/{post}", method = RequestMethod.PATCH, produces = {"application/json", "application/xml"})
     public ModelAndView postEditAction( @ModelAttribute Post post, BindingResult binding, ModelAndView response){
-        if(post.getId() > 0){
+        if(post.getId() > 0 && !binding.hasErrors()){
             getPostDao().save(post);
         }
         else{
