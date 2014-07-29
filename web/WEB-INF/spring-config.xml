@@ -25,6 +25,7 @@
         <property name="mappingResources">
             <list>
                 <value>post.hbm.xml</value>
+                <value>user.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -112,6 +113,15 @@
 
     <bean id="stringToPostConverter" class="xanderpost.converter.StringToPostConverter">
         <property name="postDao" ref="postDao"/>
+    </bean>
+
+    <bean id="userDao" class="xanderpost.repository.UserDaoHbm">
+        <property name="sessionFactory" ref="ORMSessionFactory"/>
+    </bean>
+
+    <bean id="xanderpostUserProvider"
+                class="xanderpost.security.UserProvider">
+        <property name="userDao" ref="userDao"/>
     </bean>
 
 </beans>
