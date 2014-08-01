@@ -9,10 +9,9 @@
     <beans:bean name="bcryptEncoder"
                 class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
-    <http auto-config='true'>
+    <http create-session="stateless">
         <intercept-url pattern="/**" access="ROLE_ANONYMOUS" />
         <http-basic />
-        <logout logout-url="/logout" />
     </http>
 
     <authentication-manager>
