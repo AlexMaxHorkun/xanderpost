@@ -11,11 +11,12 @@
 
     <!-- Rest authentication entry point configuration -->
     <http use-expressions="true" entry-point-ref="restAuthenticationEntryPoint">
-        <intercept-url pattern="/api/**" />
+        <intercept-url pattern="/**"/>
         <form-login authentication-success-handler-ref="restAuthSuccessHandler"
-                        authentication-failure-handler-ref="restAuthFailureHandler" />
+                    authentication-failure-handler-ref="restAuthFailureHandler" login-processing-url="/login"
+                    password-parameter="password" username-parameter="username"/>
 
-        <logout />
+        <logout/>
     </http>
 
     <authentication-manager>
@@ -24,14 +25,16 @@
         </authentication-provider>
     </authentication-manager>
 
-    <global-method-security jsr250-annotations="enabled" />
+    <global-method-security jsr250-annotations="enabled"/>
 
-
+    <!-- Entry point for REST auth -->
+    <beans:bean id="restAuthenticationEntryPoint"
+                class="xanderpost.security.RestAuthEntryPoint"/>
     <!-- Connect the custom authentication success handler -->
     <beans:bean id="restAuthSuccessHandler"
-                class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler" />
+                class="xanderpost.security.RestAuthSuccessHandler"/>
     <!-- Using default failure handler -->
     <beans:bean id="restAuthFailureHandler"
-                class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler" />
+                class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler"/>
 
 </beans:beans>
