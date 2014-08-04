@@ -9,9 +9,13 @@
     <beans:bean name="bcryptEncoder"
                 class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
-    <http create-session="stateless">
-        <intercept-url pattern="/**" access="ROLE_ANONYMOUS" />
-        <http-basic />
+    <!-- Rest authentication entry point configuration -->
+    <http use-expressions="true" entry-point-ref="restAuthenticationEntryPoint">
+        <intercept-url pattern="/api/**" />
+        <form-login authentication-success-handler-ref="restAuthSuccessHandler"
+                        authentication-failure-handler-ref="restAuthFailureHandler" />
+
+        <logout />
     </http>
 
     <authentication-manager>
@@ -22,16 +26,12 @@
 
     <global-method-security jsr250-annotations="enabled" />
 
-    <beans:bean id="filterChainProxy" class="org.springframework.security.web.FilterChainProxy">
-        <beans:constructor-arg>
-            <beans:list>
-                <filter-chain pattern="/**" filters="
-                    securityContextPersistenceFilterWithASCFalse,
-                    basicAuthenticationFilter,
-                    exceptionTranslationFilter,
-                    filterSecurityInterceptor" />
-            </beans:list>
-        </beans:constructor-arg>
-    </beans:bean>
+
+    <!-- Connect the custom authentication success handler -->
+    <beans:bean id="restAuthSuccessHandler"
+                class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler" />
+    <!-- Using default failure handler -->
+    <beans:bean id="restAuthFailureHandler"
+                class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler" />
 
 </beans:beans>
