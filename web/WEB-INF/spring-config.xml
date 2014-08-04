@@ -125,4 +125,5 @@
         <property name="userDao" ref="userDao"/>
     </bean>
 
+    <bean id="userController" class="xanderpost.web.controller.UserController"/>
 </beans>

@@ -37,4 +37,6 @@
     <beans:bean id="restAuthFailureHandler"
                 class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler"/>
 
+    <beans:bean class="org.springframework.security.web.bind.support.AuthenticationPrincipalArgumentResolver"/>
+
 </beans:beans>
