@@ -1,5 +1,8 @@
 package xanderpost.web.controller;
 
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,10 +13,13 @@ import xanderpost.entity.User;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    @RequestMapping(value="/current", method= RequestMethod.GET, produces = {"application/json", "application/xml"})
-    public ModelAndView currentAction(@AuthenticationPrincipal User user){
-        ModelAndView response=new ModelAndView();
-        response.addObject("user",user);
+    @RequestMapping(value = "/current", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
+    @Secured("ROLE_USER")
+    public ModelAndView currentAction() {
+        ModelAndView response = new ModelAndView();
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+        response.addObject("user", authentication.getPrincipal());
         return response;
     }
 }

@@ -10,33 +10,39 @@
                 class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
     <!-- Rest authentication entry point configuration -->
-    <http use-expressions="true" entry-point-ref="restAuthenticationEntryPoint">
-        <intercept-url pattern="/**"/>
-        <form-login authentication-success-handler-ref="restAuthSuccessHandler"
-                    authentication-failure-handler-ref="restAuthFailureHandler" login-processing-url="/login"
-                    password-parameter="password" username-parameter="username"/>
-
+    <http entry-point-ref="authenticationEntryPoint" authentication-manager-ref="authenticationManager">
+        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <http-basic/>
         <logout/>
     </http>
 
-    <authentication-manager>
+    <authentication-manager id="authenticationManager">
         <authentication-provider user-service-ref="xanderpostUserProvider">
             <password-encoder ref="bcryptEncoder"/>
         </authentication-provider>
     </authentication-manager>
 
-    <global-method-security jsr250-annotations="enabled"/>
+    <global-method-security jsr250-annotations="enabled" authentication-manager-ref="authenticationManager" secured-annotations="enabled"/>
 
-    <!-- Entry point for REST auth -->
-    <beans:bean id="restAuthenticationEntryPoint"
-                class="xanderpost.security.RestAuthEntryPoint"/>
-    <!-- Connect the custom authentication success handler -->
-    <beans:bean id="restAuthSuccessHandler"
-                class="xanderpost.security.RestAuthSuccessHandler"/>
-    <!-- Using default failure handler -->
-    <beans:bean id="restAuthFailureHandler"
-                class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler"/>
+    <beans:bean id="basicAuthenticationFilter"
+          class="org.springframework.security.web.authentication.www.BasicAuthenticationFilter">
+        <beans:property name="authenticationManager" ref="authenticationManager"/>
+        <beans:property name="authenticationEntryPoint" ref="authenticationEntryPoint"/>
+    </beans:bean>
+
+    <beans:bean id="authenticationEntryPoint"
+          class="org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint">
+        <beans:property name="realmName" value="Xander Post"/>
+    </beans:bean>
 
     <beans:bean class="org.springframework.security.web.bind.support.AuthenticationPrincipalArgumentResolver"/>
+
+    <beans:bean id="filterChainProxy" class="org.springframework.security.web.FilterChainProxy">
+        <beans:constructor-arg>
+            <beans:list>
+                <filter-chain pattern="/**" filters="basicAuthenticationFilter" />
+            </beans:list>
+        </beans:constructor-arg>
+    </beans:bean>
 
 </beans:beans>
