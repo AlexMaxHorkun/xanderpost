@@ -16,10 +16,15 @@
 
         <many-to-one name="parent" class="UserRole" not-null="false" column="parent_id"/>
 
-        <array name="childRoles" inverse="true">
-            <one-to-many class="UserRole"/>
+        <set name="childRoles" inverse="true">
             <key column="parent_id"/>
-        </array>
+            <one-to-many class="UserRole"/>
+        </set>
+
+        <set name="users" table="user_role">
+            <key column="role_id" not-null="true"/>
+            <many-to-many column="user_id" class="xanderpost.entity.User"/>
+        </set>
     </class>
 
 </hibernate-mapping>

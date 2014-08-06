@@ -1,5 +1,7 @@
 package xanderpost.security;
 
+import xanderpost.entity.User;
+
 public class UserRole implements org.springframework.security.core.GrantedAuthority {
     private String role;
 
@@ -8,6 +10,8 @@ public class UserRole implements org.springframework.security.core.GrantedAuthor
     private UserRole parent;
 
     private UserRole[] childRoles;
+
+    private User[] users;
 
     public String getRole() {
         return role;
@@ -43,5 +47,13 @@ public class UserRole implements org.springframework.security.core.GrantedAuthor
 
     public String getAuthority() {
         return getRole();
+    }
+
+    public User[] getUsers() {
+        return users.clone();
+    }
+
+    public void setUsers(User[] users) {
+        this.users = users.clone();
     }
 }

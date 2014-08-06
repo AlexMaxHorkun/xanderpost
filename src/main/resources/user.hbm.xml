@@ -16,10 +16,10 @@
 
         <property name="password" type="string" length="255"/>
 
-        <array name="roles">
+        <set name="authorities" table="user_role">
             <key column="user_id" not-null="true"/>
             <many-to-many column="role_id" class="xanderpost.security.UserRole"/>
-        </array>
+        </set>
     </class>
 
 </hibernate-mapping>
