@@ -36,8 +36,6 @@
         <beans:property name="realmName" value="Xander Post"/>
     </beans:bean>
 
-    <beans:bean id="restAuthSuccessHandler" class="xanderpost.security.RestAuthSuccessHandler"/>
-
     <beans:bean id="filterChainProxy" class="org.springframework.security.web.FilterChainProxy">
         <beans:constructor-arg>
             <beans:list>
