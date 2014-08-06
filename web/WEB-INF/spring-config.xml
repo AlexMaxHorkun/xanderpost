@@ -12,7 +12,11 @@
         http://www.springframework.org/schema/aop
         http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-    <mvc:annotation-driven conversion-service="conversionService"/>
+    <mvc:annotation-driven conversion-service="conversionService">
+        <mvc:argument-resolvers>
+            <bean class="org.springframework.security.web.bind.support.AuthenticationPrincipalArgumentResolver"/>
+        </mvc:argument-resolvers>
+    </mvc:annotation-driven>
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
@@ -99,10 +103,10 @@
     </bean>
 
     <bean id="PostController" class="xanderpost.web.controller.PostController">
-        <property name="postDao" ref="postDao"  />
+        <property name="postDao" ref="postDao"/>
     </bean>
 
-    <bean id="postDao" class="xanderpost.repository.PostDaoHbm" >
+    <bean id="postDao" class="xanderpost.repository.PostDaoHbm">
         <property name="sessionFactory" ref="ORMSessionFactory"/>
     </bean>
 
@@ -121,7 +125,7 @@
     </bean>
 
     <bean id="xanderpostUserProvider"
-                class="xanderpost.security.UserProvider">
+          class="xanderpost.security.UserProvider">
         <property name="userDao" ref="userDao"/>
     </bean>
 

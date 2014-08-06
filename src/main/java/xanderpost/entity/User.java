@@ -3,10 +3,14 @@ package xanderpost.entity;
 import org.springframework.security.core.userdetails.UserDetails;
 import xanderpost.security.GrantedAuthority;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class User implements UserDetails{
+public class User implements UserDetails {
     private long id;
 
     private String email;
@@ -37,29 +41,33 @@ public class User implements UserDetails{
         this.password = password;
     }
 
-    public Collection<GrantedAuthority> getAuthorities(){
-        Collection<GrantedAuthority> auths=new ArrayList<GrantedAuthority>();
+    public Collection<GrantedAuthority> getAuthorities() {
+        Collection<GrantedAuthority> auths = new ArrayList<GrantedAuthority>();
         auths.add(new GrantedAuthority());
         return auths;
     }
 
-    public boolean isCredentialsNonExpired(){
+    public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    public String getUsername(){
+    public String getUsername() {
         return getEmail();
     }
 
-    public boolean isAccountNonExpired(){
+    public boolean isAccountNonExpired() {
         return true;
     }
 
-    public boolean isAccountNonLocked(){
+    public boolean isAccountNonLocked() {
         return true;
     }
 
-    public boolean isEnabled(){
+    public boolean isEnabled() {
         return true;
+    }
+
+    public void eraseCredentials() {
+        password = null;
     }
 }

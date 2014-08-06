@@ -16,31 +16,32 @@
         <logout/>
     </http>
 
-    <authentication-manager id="authenticationManager">
+    <authentication-manager id="authenticationManager" erase-credentials="false">
         <authentication-provider user-service-ref="xanderpostUserProvider">
             <password-encoder ref="bcryptEncoder"/>
         </authentication-provider>
     </authentication-manager>
 
-    <global-method-security jsr250-annotations="enabled" authentication-manager-ref="authenticationManager" secured-annotations="enabled"/>
+    <global-method-security jsr250-annotations="enabled" authentication-manager-ref="authenticationManager"
+                            secured-annotations="enabled"/>
 
     <beans:bean id="basicAuthenticationFilter"
-          class="org.springframework.security.web.authentication.www.BasicAuthenticationFilter">
+                class="org.springframework.security.web.authentication.www.BasicAuthenticationFilter">
         <beans:property name="authenticationManager" ref="authenticationManager"/>
         <beans:property name="authenticationEntryPoint" ref="authenticationEntryPoint"/>
     </beans:bean>
 
     <beans:bean id="authenticationEntryPoint"
-          class="org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint">
+                class="org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint">
         <beans:property name="realmName" value="Xander Post"/>
     </beans:bean>
 
-    <beans:bean class="org.springframework.security.web.bind.support.AuthenticationPrincipalArgumentResolver"/>
+    <beans:bean id="restAuthSuccessHandler" class="xanderpost.security.RestAuthSuccessHandler"/>
 
     <beans:bean id="filterChainProxy" class="org.springframework.security.web.FilterChainProxy">
         <beans:constructor-arg>
             <beans:list>
-                <filter-chain pattern="/**" filters="basicAuthenticationFilter" />
+                <filter-chain pattern="/**" filters="basicAuthenticationFilter"/>
             </beans:list>
         </beans:constructor-arg>
     </beans:bean>

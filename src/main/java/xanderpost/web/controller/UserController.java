@@ -15,11 +15,11 @@ import xanderpost.entity.User;
 public class UserController {
     @RequestMapping(value = "/current", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
     @Secured("ROLE_USER")
-    public ModelAndView currentAction() {
+    public ModelAndView currentAction(@AuthenticationPrincipal User user) {
         ModelAndView response = new ModelAndView();
-        Authentication authentication =
-                SecurityContextHolder.getContext().getAuthentication();
-        response.addObject("user", authentication.getPrincipal());
+        /*Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();*/
+        response.addObject("user", user/*authentication.getPrincipal()*/);
         return response;
     }
 }
