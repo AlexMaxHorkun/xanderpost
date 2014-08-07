@@ -12,13 +12,14 @@ public class UserRole implements org.springframework.security.core.GrantedAuthor
 
     private UserRole parent;
 
-    private List<UserRole> childRoles=new ArrayList<UserRole>();
+    private List<UserRole> childRoles = new ArrayList<UserRole>();
 
-    private List<User>users=new ArrayList<User>();
+    private List<User> users = new ArrayList<User>();
 
-    public UserRole(){}
+    public UserRole() {
+    }
 
-    public UserRole(String r){
+    public UserRole(String r) {
         setRole(r);
     }
 

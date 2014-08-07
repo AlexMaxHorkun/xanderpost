@@ -20,45 +20,41 @@ public class PostDaoHbm implements PostDaoInterface {
         this.sessionFactory = sessionFactory;
     }
 
-    public Post find(long id){
-        Session orm=getSessionFactory().openSession();
-        Post post=(Post)orm.get(Post.class, id);
-        orm.close();
+    public Post find(long id) {
+        Session orm = getSessionFactory().getCurrentSession();
+        Post post = (Post) orm.get(Post.class, id);
+        //orm.close();
         return post;
     }
 
-    public Collection<Post> findByTitle(String t){
-        Session orm=sessionFactory.openSession();
-        Collection<Post> posts=(Collection<Post>)orm.createCriteria(Post.class).add(Restrictions.eq("title", t)).list();
-        orm.close();
+    public Collection<Post> findByTitle(String t) {
+        Session orm = sessionFactory.getCurrentSession();
+        Collection<Post> posts = (Collection<Post>) orm.createCriteria(Post.class).add(Restrictions.eq("title", t)).list();
+        //orm.close();
         return posts;
     }
 
-    public Collection<Post> findAll(){
-        Session orm=sessionFactory.openSession();
-        Collection<Post> posts=(Collection<Post>)orm.createCriteria(Post.class).list();
-        orm.close();
+    public Collection<Post> findAll() {
+        Session orm = sessionFactory.getCurrentSession();
+        Collection<Post> posts = (Collection<Post>) orm.createCriteria(Post.class).list();
         return posts;
     }
 
-    public void persist(Post p){
-        Session orm=sessionFactory.openSession();
+    public void persist(Post p) {
+        Session orm = sessionFactory.getCurrentSession();
         orm.persist(p);
         orm.flush();
-        orm.close();
     }
 
-    public void delete(Post p){
-        Session orm=sessionFactory.openSession();
+    public void delete(Post p) {
+        Session orm = sessionFactory.getCurrentSession();
         orm.delete(p);
         orm.flush();
-        orm.close();
     }
 
-    public void save(Post p){
-        Session orm=sessionFactory.openSession();
+    public void save(Post p) {
+        Session orm = sessionFactory.getCurrentSession();
         orm.update(p);
         orm.flush();
-        orm.close();
     }
 }

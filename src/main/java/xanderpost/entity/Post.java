@@ -7,18 +7,19 @@ public class Post {
     private long id;
 
     @NotNull
-    @Size(max = 255, min=3)
+    @Size(max = 255, min = 3)
     private String title;
 
     @NotNull
-    @Size(max=4000, min=3)
+    @Size(max = 4000, min = 3)
     private String text;
 
-    public Post(){}
+    public Post() {
+    }
 
-    public Post(String title, String text){
-        this.text=text;
-        this.title=title;
+    public Post(String title, String text) {
+        this.text = text;
+        this.title = title;
     }
 
     public long getId() {

@@ -12,7 +12,7 @@ public class User implements UserDetails {
 
     private String password;
 
-    private List<UserRole> roles=new ArrayList<UserRole>();
+    private List<UserRole> roles = new ArrayList<UserRole>();
 
     public long getId() {
         return id;

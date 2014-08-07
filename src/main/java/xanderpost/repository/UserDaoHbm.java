@@ -5,7 +5,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import xanderpost.entity.User;
 
-public class UserDaoHbm implements UserDaoInterface{
+public class UserDaoHbm implements UserDaoInterface {
     private SessionFactory sessionFactory;
 
     public SessionFactory getSessionFactory() {
@@ -16,17 +16,15 @@ public class UserDaoHbm implements UserDaoInterface{
         this.sessionFactory = sessionFactory;
     }
 
-    public User find(long id){
-        Session orm=getSessionFactory().openSession();
-        User u=(User)orm.get(User.class,id);
-        orm.close();
+    public User find(long id) {
+        Session orm = getSessionFactory().getCurrentSession();
+        User u = (User) orm.get(User.class, id);
         return u;
     }
 
-    public User findByEmail(String e){
-        Session orm=getSessionFactory().openSession();
-        User u=(User)orm.createCriteria(User.class).add(Restrictions.eq("email",e)).uniqueResult();
-        orm.close();
+    public User findByEmail(String e) {
+        Session orm = getSessionFactory().getCurrentSession();
+        User u = (User) orm.createCriteria(User.class).add(Restrictions.eq("email", e)).uniqueResult();
         return u;
     }
 }

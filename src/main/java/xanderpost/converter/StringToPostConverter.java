@@ -4,7 +4,7 @@ import org.springframework.core.convert.converter.Converter;
 import xanderpost.entity.Post;
 import xanderpost.repository.PostDaoInterface;
 
-public class StringToPostConverter implements Converter<String, Post>{
+public class StringToPostConverter implements Converter<String, Post> {
     private PostDaoInterface postDao;
 
     public PostDaoInterface getPostDao() {
@@ -15,7 +15,7 @@ public class StringToPostConverter implements Converter<String, Post>{
         this.postDao = postDao;
     }
 
-    public Post convert(String id){
+    public Post convert(String id) {
         return getPostDao().find(Long.parseLong(id));
     }
 }
