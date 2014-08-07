@@ -22,22 +22,17 @@ public class PostDaoHbm implements PostDaoInterface {
 
     public Post find(long id) {
         Session orm = getSessionFactory().getCurrentSession();
-        Post post = (Post) orm.get(Post.class, id);
-        //orm.close();
-        return post;
+        return (Post) orm.get(Post.class, id);
     }
 
     public Collection<Post> findByTitle(String t) {
         Session orm = sessionFactory.getCurrentSession();
-        Collection<Post> posts = (Collection<Post>) orm.createCriteria(Post.class).add(Restrictions.eq("title", t)).list();
-        //orm.close();
-        return posts;
+        return (Collection<Post>) orm.createCriteria(Post.class).add(Restrictions.eq("title", t)).list();
     }
 
     public Collection<Post> findAll() {
         Session orm = sessionFactory.getCurrentSession();
-        Collection<Post> posts = (Collection<Post>) orm.createCriteria(Post.class).list();
-        return posts;
+        return (Collection<Post>) orm.createCriteria(Post.class).list();
     }
 
     public void persist(Post p) {

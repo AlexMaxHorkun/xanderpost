@@ -18,13 +18,11 @@ public class UserDaoHbm implements UserDaoInterface {
 
     public User find(long id) {
         Session orm = getSessionFactory().getCurrentSession();
-        User u = (User) orm.get(User.class, id);
-        return u;
+        return (User) orm.get(User.class, id);
     }
 
     public User findByEmail(String e) {
         Session orm = getSessionFactory().getCurrentSession();
-        User u = (User) orm.createCriteria(User.class).add(Restrictions.eq("email", e)).uniqueResult();
-        return u;
+        return (User) orm.createCriteria(User.class).add(Restrictions.eq("email", e)).uniqueResult();
     }
 }
