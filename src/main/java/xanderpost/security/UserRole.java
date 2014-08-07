@@ -2,9 +2,12 @@ package xanderpost.security;
 
 import xanderpost.entity.User;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "UserRole")
 public class UserRole implements org.springframework.security.core.GrantedAuthority {
     private String role;
 
@@ -23,6 +26,7 @@ public class UserRole implements org.springframework.security.core.GrantedAuthor
         setRole(r);
     }
 
+    @Column(name = "role", length = 64, nullable = false, unique = true)
     public String getRole() {
         return role;
     }
@@ -31,6 +35,9 @@ public class UserRole implements org.springframework.security.core.GrantedAuthor
         this.role = role;
     }
 
+    @Id
+    @Column(name = "id")
+    @GeneratedValue
     public int getId() {
         return id;
     }
@@ -39,6 +46,8 @@ public class UserRole implements org.springframework.security.core.GrantedAuthor
         this.id = id;
     }
 
+    @ManyToOne(optional = true, targetEntity = UserRole.class, cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_id", referencedColumnName = "id", nullable = true)
     public UserRole getParent() {
         return parent;
     }
@@ -47,6 +56,7 @@ public class UserRole implements org.springframework.security.core.GrantedAuthor
         this.parent = parent;
     }
 
+    @OneToMany(targetEntity = UserRole.class, mappedBy = "parent", orphanRemoval = false, fetch = FetchType.LAZY)
     public List<UserRole> getChildRoles() {
         return childRoles;
     }
@@ -55,10 +65,13 @@ public class UserRole implements org.springframework.security.core.GrantedAuthor
         this.childRoles = childRoles;
     }
 
+    @Transient
     public String getAuthority() {
         return getRole();
     }
 
+    @ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     public List<User> getUsers() {
         return users;
     }
