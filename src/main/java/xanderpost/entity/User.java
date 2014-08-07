@@ -64,6 +64,7 @@ public class User implements UserDetails {
         return true;
     }
 
+    @JsonIgnore
     @Transient
     public String getUsername() {
         return getEmail();

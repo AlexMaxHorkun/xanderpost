@@ -28,7 +28,7 @@ public class UserController {
     @RequestMapping(value = "", method = RequestMethod.POST, produces = {"application/json", "application/xml"})
     @Secured("ROLE_ADMIN")
     public Model userAdd(@ModelAttribute User user, BindingResult binding, Model model) {
-
+        
         return model;
     }
 }

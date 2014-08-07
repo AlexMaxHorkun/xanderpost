@@ -41,6 +41,8 @@
         </property>
     </bean>
 
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
     <bean id="xmlMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">
         <property name="aliases">
             <props>

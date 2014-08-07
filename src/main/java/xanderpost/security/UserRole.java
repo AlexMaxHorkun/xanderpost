@@ -1,5 +1,6 @@
 package xanderpost.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import xanderpost.entity.User;
 
 import javax.persistence.*;
@@ -56,26 +57,31 @@ public class UserRole implements org.springframework.security.core.GrantedAuthor
         this.parent = parent;
     }
 
+    @JsonIgnore
     @OneToMany(targetEntity = UserRole.class, mappedBy = "parent", orphanRemoval = false, fetch = FetchType.LAZY)
     public List<UserRole> getChildRoles() {
         return childRoles;
     }
 
+    @JsonIgnore
     public void setChildRoles(List<UserRole> childRoles) {
         this.childRoles = childRoles;
     }
 
+    @JsonIgnore
     @Transient
     public String getAuthority() {
         return getRole();
     }
 
+    @JsonIgnore
     @ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     public List<User> getUsers() {
         return users;
     }
 
+    @JsonIgnore
     public void setUsers(List<User> users) {
         this.users = users;
     }
