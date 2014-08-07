@@ -2,6 +2,9 @@ package xanderpost.security;
 
 import xanderpost.entity.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserRole implements org.springframework.security.core.GrantedAuthority {
     private String role;
 
@@ -9,9 +12,15 @@ public class UserRole implements org.springframework.security.core.GrantedAuthor
 
     private UserRole parent;
 
-    private UserRole[] childRoles;
+    private List<UserRole> childRoles=new ArrayList<UserRole>();
 
-    private User[] users;
+    private List<User>users=new ArrayList<User>();
+
+    public UserRole(){}
+
+    public UserRole(String r){
+        setRole(r);
+    }
 
     public String getRole() {
         return role;
@@ -37,23 +46,23 @@ public class UserRole implements org.springframework.security.core.GrantedAuthor
         this.parent = parent;
     }
 
-    public UserRole[] getChildRoles() {
-        return childRoles.clone();
+    public List<UserRole> getChildRoles() {
+        return childRoles;
     }
 
-    public void setChildRoles(UserRole[] childRoles) {
-        this.childRoles = childRoles.clone();
+    public void setChildRoles(List<UserRole> childRoles) {
+        this.childRoles = childRoles;
     }
 
     public String getAuthority() {
         return getRole();
     }
 
-    public User[] getUsers() {
-        return users.clone();
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setUsers(User[] users) {
-        this.users = users.clone();
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }

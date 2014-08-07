@@ -3,9 +3,7 @@ package xanderpost.entity;
 import org.springframework.security.core.userdetails.UserDetails;
 import xanderpost.security.UserRole;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 
 public class User implements UserDetails {
     private long id;
@@ -14,7 +12,7 @@ public class User implements UserDetails {
 
     private String password;
 
-    private UserRole[] roles;
+    private List<UserRole> roles=new ArrayList<UserRole>();
 
     public long getId() {
         return id;
@@ -40,12 +38,12 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public Collection<UserRole> getAuthorities() {
-        return new ArrayList<UserRole>(Arrays.asList(roles));
+    public List<UserRole> getAuthorities() {
+        return roles;
     }
 
-    public void setAuthorities(Collection<UserRole> roles) {
-        this.roles = roles.toArray(new UserRole[roles.size()]);
+    public void setAuthorities(List<UserRole> roles) {
+        this.roles = roles;
     }
 
     public boolean isCredentialsNonExpired() {

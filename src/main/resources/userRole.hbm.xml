@@ -14,17 +14,19 @@
 
         <property name="role" type="string" length="64" column="role"/>
 
-        <many-to-one name="parent" class="UserRole" not-null="false" column="parent_id"/>
+        <many-to-one name="parent" class="UserRole" not-null="false" column="parent_id" lazy="false"/>
 
-        <set name="childRoles" inverse="true">
-            <key column="parent_id"/>
-            <one-to-many class="UserRole"/>
-        </set>
+        <list name="childRoles" inverse="true" lazy="false" cascade="all">
+            <key column="parent_id" not-null="false" />
+            <list-index base="0" />
+            <one-to-many class="UserRole" />
+        </list>
 
-        <set name="users" table="user_role">
+        <list name="users" table="user_role" lazy="true">
             <key column="role_id" not-null="true"/>
+            <list-index base="0"/>
             <many-to-many column="user_id" class="xanderpost.entity.User"/>
-        </set>
+        </list>
     </class>
 
 </hibernate-mapping>
