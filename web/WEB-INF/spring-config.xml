@@ -87,15 +87,7 @@
         <property name="hibernateManagedSession" value="false"/>
     </bean>
 
-    <tx:advice id="txAdvice" transaction-manager="txManager">
-        <!-- the transactional semantics... -->
-        <tx:attributes>
-            <!-- all methods starting with get are read-only -->
-            <tx:method name="find*" read-only="true"/>
-            <!-- other methods use the default transaction settings (see below) -->
-            <tx:method name="*"/>
-        </tx:attributes>
-    </tx:advice>
+    <tx:annotation-driven />
 
     <bean id="conversionService"
           class="org.springframework.context.support.ConversionServiceFactoryBean">
@@ -114,12 +106,6 @@
         <property name="sessionFactory" ref="ORMSessionFactory"/>
     </bean>
 
-    <aop:aspectj-autoproxy/>
-    <aop:config>
-        <aop:pointcut id="repositoryOperation" expression="execution(* xanderpost.repository.*.*(..))"/>
-        <aop:advisor advice-ref="txAdvice" pointcut-ref="repositoryOperation"/>
-    </aop:config>
-
     <bean id="stringToPostConverter" class="xanderpost.converter.StringToPostConverter">
         <property name="postDao" ref="postDao"/>
     </bean>
@@ -133,5 +119,14 @@
         <property name="userDao" ref="userDao"/>
     </bean>
 
-    <bean id="userController" class="xanderpost.web.controller.UserController"/>
+    <bean id="userController" class="xanderpost.web.controller.UserController">
+        <property name="userService" ref="userService"/>
+    </bean>
+
+    <bean id="userRoleDao" class="xanderpost.repository.UserRoleDaoHbm" />
+
+    <bean id="userService" class="xanderpost.service.UserService">
+        <property name="userDao" ref="userDao"/>
+        <property name="userRoleDao" ref="userRoleDao" />
+    </bean>
 </beans>

@@ -11,22 +11,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import xanderpost.entity.User;
 import xanderpost.repository.UserDaoInterface;
+import xanderpost.security.UserRole;
+import xanderpost.service.UserService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
 
-    private UserDaoInterface userDao;
+    private UserService userService;
 
-    public UserDaoInterface getUserDao() {
-        return userDao;
+    public UserService getUserService() {
+        return userService;
     }
 
-    public void setUserDao(UserDaoInterface userDao) {
-        this.userDao = userDao;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     @RequestMapping(value = "/current", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
@@ -40,8 +44,8 @@ public class UserController {
     @RequestMapping(value = "", method = RequestMethod.POST, produces = {"application/json", "application/xml"})
     @Secured("ROLE_ADMIN")
     public Model userAdd(@ModelAttribute User user, BindingResult binding, Model model) {
-        if(!binding.hasErrors()){
-            getUserDao().persist(user);
+        if (!binding.hasErrors()) {
+            getUserService().persist(user, new String[]{"ROLE_USER"});
         }
         return model;
     }
