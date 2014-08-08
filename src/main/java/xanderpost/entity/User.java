@@ -1,10 +1,13 @@
 package xanderpost.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.Email;
 import org.springframework.security.core.userdetails.UserDetails;
 import xanderpost.security.UserRole;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.*;
 
 @Entity
@@ -30,6 +33,8 @@ public class User implements UserDetails {
     }
 
     @Column(name = "email", unique = true, nullable = false)
+    @NotNull
+    @Email
     public String getEmail() {
         return email;
     }
@@ -40,6 +45,8 @@ public class User implements UserDetails {
 
     @JsonIgnore
     @Column(name = "password", unique = false, nullable = false)
+    @NotNull
+    @Size(min = 3, max = 128)
     public String getPassword() {
         return password;
     }

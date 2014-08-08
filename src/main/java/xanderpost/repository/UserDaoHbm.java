@@ -25,4 +25,10 @@ public class UserDaoHbm implements UserDaoInterface {
         Session orm = getSessionFactory().getCurrentSession();
         return (User) orm.createCriteria(User.class).add(Restrictions.eq("email", e)).uniqueResult();
     }
+
+    public void persist(User u){
+        Session orm=sessionFactory.getCurrentSession();
+        orm.persist(u);
+        orm.flush();
+    }
 }
