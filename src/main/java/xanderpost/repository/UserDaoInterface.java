@@ -10,4 +10,8 @@ public interface UserDaoInterface {
     public User findByEmail(String e);
 
     public void persist(User u);
+
+    public void save(User u);
+
+    public void remove(User u);
 }

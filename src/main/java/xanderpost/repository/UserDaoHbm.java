@@ -33,4 +33,16 @@ public class UserDaoHbm implements UserDaoInterface {
         orm.persist(u);
         orm.flush();
     }
+
+    public void save(User u) {
+        Session orm = sessionFactory.getCurrentSession();
+        orm.update(u);
+        orm.flush();
+    }
+
+    public void remove(User u) {
+        Session orm = sessionFactory.getCurrentSession();
+        orm.delete(u);
+        orm.flush();
+    }
 }

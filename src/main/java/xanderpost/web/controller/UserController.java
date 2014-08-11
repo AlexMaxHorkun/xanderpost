@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -45,8 +46,16 @@ public class UserController {
     @Secured("ROLE_ADMIN")
     public Model userAdd(@ModelAttribute User user, BindingResult binding, Model model) {
         if (!binding.hasErrors()) {
-            getUserService().persist(user, new String[]{"ROLE_USER"});
+            getUserService().persist(user);
         }
         return model;
+    }
+
+    @RequestMapping(value = "/{u}", method = RequestMethod.DELETE, produces = {"application/json", "application/xml"})
+    @Secured("ROLE_ADMIN")
+    public Model userDelete(@PathVariable User u, Model response) {
+        userService.remove(u);
+        response.addAttribute("user", u);
+        return response;
     }
 }

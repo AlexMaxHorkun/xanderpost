@@ -87,13 +87,14 @@
         <property name="hibernateManagedSession" value="false"/>
     </bean>
 
-    <tx:annotation-driven />
+    <tx:annotation-driven transaction-manager="txManager" />
 
     <bean id="conversionService"
           class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
             <set>
                 <ref bean="stringToPostConverter"/>
+                <ref bean="stringToUserConverter" />
             </set>
         </property>
     </bean>
@@ -116,17 +117,29 @@
 
     <bean id="xanderpostUserProvider"
           class="xanderpost.security.UserProvider">
-        <property name="userDao" ref="userDao"/>
+        <property name="userService" ref="userService"/>
     </bean>
 
     <bean id="userController" class="xanderpost.web.controller.UserController">
         <property name="userService" ref="userService"/>
     </bean>
 
-    <bean id="userRoleDao" class="xanderpost.repository.UserRoleDaoHbm" />
+    <bean id="userRoleDao" class="xanderpost.repository.UserRoleDaoHbm" >
+        <property name="sessionFactory" ref="ORMSessionFactory"/>
+    </bean>
 
     <bean id="userService" class="xanderpost.service.UserService">
         <property name="userDao" ref="userDao"/>
         <property name="userRoleDao" ref="userRoleDao" />
+        <property name="passwordEncoder" ref="passwordEncoder" />
+        <property name="stdRoles" >
+            <array value-type="java.lang.String">
+                <value>ROLE_USER</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="stringToUserConverter" class="xanderpost.converter.StringToUserConverter">
+        <property name="userService" ref="userService" />
     </bean>
 </beans>

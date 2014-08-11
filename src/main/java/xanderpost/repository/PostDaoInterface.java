@@ -1,6 +1,7 @@
 package xanderpost.repository;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import xanderpost.entity.Post;
 
 import java.util.Collection;
@@ -12,6 +13,7 @@ public interface PostDaoInterface {
 
     public Collection<Post> findByTitle(String t);
 
+    @Transactional(readOnly = true)
     public Collection<Post> findAll();
 
     public void persist(Post p);

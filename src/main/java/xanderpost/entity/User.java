@@ -21,6 +21,8 @@ public class User implements UserDetails {
 
     private List<UserRole> roles = new ArrayList<UserRole>();
 
+    private boolean enabled = true;
+
     @Id
     @Column(name = "id")
     @GeneratedValue
@@ -87,9 +89,13 @@ public class User implements UserDetails {
         return true;
     }
 
-    @Transient
+    @Column(name = "enabled", columnDefinition = "default true")
     public boolean isEnabled() {
-        return true;
+        return enabled;
+    }
+
+    public void setEnabled(boolean e) {
+        enabled = e;
     }
 
     public void eraseCredentials() {

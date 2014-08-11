@@ -3,19 +3,20 @@ package xanderpost.security;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import xanderpost.entity.User;
 import xanderpost.repository.UserDaoInterface;
+import xanderpost.service.UserService;
 
 public class UserProvider implements UserDetailsService {
-    private UserDaoInterface userDao;
+    private UserService userService;
 
-    public UserDaoInterface getUserDao() {
-        return userDao;
+    public UserService getUserService() {
+        return userService;
     }
 
-    public void setUserDao(UserDaoInterface userDao) {
-        this.userDao = userDao;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     public User loadUserByUsername(String n) {
-        return getUserDao().findByEmail(n);
+        return getUserService().findByEmail(n);
     }
 }
