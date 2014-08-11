@@ -3,10 +3,12 @@ package xanderpost.repository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 import xanderpost.security.UserRole;
 
 import java.util.List;
 
+@Repository
 public class UserRoleDaoHbm implements UserRoleDaoInterface {
     private SessionFactory sessionFactory;
 

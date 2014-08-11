@@ -3,8 +3,10 @@ package xanderpost.repository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 import xanderpost.entity.User;
 
+@Repository
 public class UserDaoHbm implements UserDaoInterface {
     private SessionFactory sessionFactory;
 
