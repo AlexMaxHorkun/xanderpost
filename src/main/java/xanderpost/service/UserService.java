@@ -90,4 +90,17 @@ public class UserService {
             remove(u);
         }
     }
+
+    @Transactional
+    public void save(User u) {
+        userDao.save(u);
+    }
+
+    @Transactional
+    public void save(User u, boolean encodePasswordFirst) {
+        if (encodePasswordFirst) {
+            u.setPassword(passwordEncoder.encode(u.getPassword()));
+        }
+        save(u);
+    }
 }

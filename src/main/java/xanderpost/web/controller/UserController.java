@@ -5,26 +5,30 @@ import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import xanderpost.entity.Post;
 import xanderpost.entity.User;
 import xanderpost.repository.UserDaoInterface;
 import xanderpost.security.UserRole;
 import xanderpost.service.UserService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.validation.ConstraintViolation;
+import javax.validation.ValidatorFactory;
+import java.security.InvalidParameterException;
+import java.util.*;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
 
     private UserService userService;
+
+    private LocalValidatorFactoryBean validator;
 
     public UserService getUserService() {
         return userService;
@@ -34,7 +38,15 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/current", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
+    public LocalValidatorFactoryBean getValidator() {
+        return validator;
+    }
+
+    public void setValidator(LocalValidatorFactoryBean validator) {
+        this.validator = validator;
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.GET, produces = {"application/json", "application/xml"})
     @Secured("ROLE_USER")
     public Map<String, Object> currentAction(@AuthenticationPrincipal User user) {
         HashMap<String, Object> response = new HashMap<String, Object>();
@@ -43,8 +55,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST, produces = {"application/json", "application/xml"})
-    @Secured("ROLE_ADMIN")
-    public Model userAdd(@ModelAttribute User user, BindingResult binding, Model model) {
+    public Model userAddAction(@ModelAttribute User user, BindingResult binding, Model model) {
         if (!binding.hasErrors()) {
             getUserService().persist(user);
         }
@@ -53,9 +64,28 @@ public class UserController {
 
     @RequestMapping(value = "/{u}", method = RequestMethod.DELETE, produces = {"application/json", "application/xml"})
     @Secured("ROLE_ADMIN")
-    public Model userDelete(@PathVariable User u, Model response) {
+    public Model userDeleteAction(@PathVariable User u, Model response) {
         userService.remove(u);
         response.addAttribute("user", u);
+        return response;
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.PATCH, produces = {"application/json", "application/xml"})
+    @Secured("ROLE_USER")
+    public Model userSelfEditAction(String email, String password, @AuthenticationPrincipal User currentUser, Model response) {
+        if (email != null) {
+            currentUser.setEmail(email);
+        }
+        if (password != null) {
+            currentUser.setPassword(password);
+        }
+        Set<ConstraintViolation<User>> errors = validator.validate(currentUser);
+        if (errors.size() > 0) {
+            throw new RuntimeException("Given values are not valid");
+        } else {
+            userService.save(currentUser, true); //encode password and save user
+        }
+        response.addAttribute("user", currentUser);
         return response;
     }
 }

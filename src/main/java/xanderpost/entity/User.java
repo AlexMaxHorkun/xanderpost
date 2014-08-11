@@ -61,7 +61,12 @@ public class User implements UserDetails {
     @ManyToMany(targetEntity = UserRole.class, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     public List<UserRole> getAuthorities() {
-        return roles;
+        List<UserRole> authorities = new ArrayList<UserRole>();
+        for (UserRole role : roles) {
+            authorities.add(role);
+            authorities.addAll(role.getChildRoles());
+        }
+        return authorities;
     }
 
     public void setAuthorities(List<UserRole> roles) {

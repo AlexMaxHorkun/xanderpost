@@ -122,6 +122,7 @@
 
     <bean id="userController" class="xanderpost.web.controller.UserController">
         <property name="userService" ref="userService"/>
+        <property name="validator" ref="validator" />
     </bean>
 
     <bean id="userRoleDao" class="xanderpost.repository.UserRoleDaoHbm" >
