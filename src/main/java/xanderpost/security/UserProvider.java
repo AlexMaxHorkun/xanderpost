@@ -2,7 +2,6 @@ package xanderpost.security;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import xanderpost.entity.User;
-import xanderpost.repository.UserDaoInterface;
 import xanderpost.service.UserService;
 
 public class UserProvider implements UserDetailsService {

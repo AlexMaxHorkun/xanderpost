@@ -18,6 +18,10 @@ public class UserService {
 
     private String[] stdRoles;
 
+    public enum FetchMode {
+        FETCH_PLAIN, FETCH_WITH_ROLES
+    }
+
     public UserDaoInterface getUserDao() {
         return userDao;
     }
@@ -50,10 +54,16 @@ public class UserService {
         this.stdRoles = stdRoles;
     }
 
+    protected void fetchUser(User u, FetchMode fetchMode) {
+        if (fetchMode == FetchMode.FETCH_WITH_ROLES) {
+            u.getAuthorities();
+        }
+    }
+
     @Transactional
     public void persist(User u) {
         u.setPassword(passwordEncoder.encode(u.getPassword()));
-        if (u.getAuthorities() == null) {
+        if (u.getRoles() == null || u.getRoles().isEmpty()) {
             persist(u, stdRoles);
         }
         userDao.persist(u);
@@ -62,18 +72,22 @@ public class UserService {
     @Transactional
     public void persist(User u, String[] roles) {
         List<UserRole> roleList = userRoleDao.findByRoles(roles);
-        u.setAuthorities(roleList);
+        u.setRoles(roleList);
         persist(u);
     }
 
     @Transactional(readOnly = true)
     public User find(long id) {
-        return userDao.find(id);
+        User u = userDao.find(id);
+        fetchUser(u, FetchMode.FETCH_WITH_ROLES);
+        return u;
     }
 
     @Transactional(readOnly = true)
     public User findByEmail(String e) {
-        return userDao.findByEmail(e);
+        User u = userDao.findByEmail(e);
+        fetchUser(u, FetchMode.FETCH_WITH_ROLES);
+        return u;
     }
 
     @Transactional

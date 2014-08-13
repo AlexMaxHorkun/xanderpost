@@ -8,7 +8,8 @@ import xanderpost.security.UserRole;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "User")
@@ -60,6 +61,12 @@ public class User implements UserDetails {
 
     @ManyToMany(targetEntity = UserRole.class, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    public List<UserRole> getRoles() {
+        return roles;
+    }
+
+    @Transient
+    @JsonIgnore
     public List<UserRole> getAuthorities() {
         List<UserRole> authorities = new ArrayList<UserRole>();
         for (UserRole role : roles) {
@@ -69,11 +76,12 @@ public class User implements UserDetails {
         return authorities;
     }
 
-    public void setAuthorities(List<UserRole> roles) {
+    public void setRoles(List<UserRole> roles) {
         this.roles = roles;
     }
 
     @Transient
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
@@ -85,20 +93,24 @@ public class User implements UserDetails {
     }
 
     @Transient
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Transient
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Column(name = "enabled", columnDefinition = "default true")
+    @JsonIgnore
     public boolean isEnabled() {
         return enabled;
     }
 
+    @JsonIgnore
     public void setEnabled(boolean e) {
         enabled = e;
     }

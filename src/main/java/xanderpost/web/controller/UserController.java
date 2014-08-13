@@ -1,5 +1,7 @@
 package xanderpost.web.controller;
 
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -10,17 +12,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-import xanderpost.entity.Post;
 import xanderpost.entity.User;
-import xanderpost.repository.UserDaoInterface;
-import xanderpost.security.UserRole;
 import xanderpost.service.UserService;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
-import javax.validation.ValidatorFactory;
-import java.security.InvalidParameterException;
-import java.util.*;
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/user")
@@ -54,11 +54,23 @@ public class UserController {
         return response;
     }
 
-    @RequestMapping(value = "", method = RequestMethod.POST, produces = {"application/json", "application/xml"})
-    public Model userAddAction(@ModelAttribute User user, BindingResult binding, Model model) {
+    @RequestMapping(value = "", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public Model userAddAction(@Valid @ModelAttribute User user, BindingResult binding, Model model, HttpServletResponse response) {
+        boolean error = false;
         if (!binding.hasErrors()) {
-            getUserService().persist(user);
+            try {
+                getUserService().persist(user);
+            } catch (DataIntegrityViolationException violationEx) {
+                error = true;
+            }
+        } else {
+            error = true;
         }
+
+        if (error) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+
         return model;
     }
 
