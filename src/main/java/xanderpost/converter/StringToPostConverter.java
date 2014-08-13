@@ -2,20 +2,20 @@ package xanderpost.converter;
 
 import org.springframework.core.convert.converter.Converter;
 import xanderpost.entity.Post;
-import xanderpost.repository.PostDaoInterface;
+import xanderpost.service.PostService;
 
 public class StringToPostConverter implements Converter<String, Post> {
-    private PostDaoInterface postDao;
+    private PostService postService;
 
-    public PostDaoInterface getPostDao() {
-        return postDao;
+    public PostService getPostService() {
+        return postService;
     }
 
-    public void setPostDao(PostDaoInterface postDao) {
-        this.postDao = postDao;
+    public void setPostService(PostService postService) {
+        this.postService = postService;
     }
 
     public Post convert(String id) {
-        return getPostDao().find(Long.parseLong(id));
+        return getPostService().find(Long.parseLong(id));
     }
 }

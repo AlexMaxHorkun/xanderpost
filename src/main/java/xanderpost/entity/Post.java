@@ -17,6 +17,8 @@ public class Post {
     @Size(max = 4000, min = 3)
     private String text;
 
+    private User author;
+
     public Post() {
     }
 
@@ -52,5 +54,15 @@ public class Post {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    @ManyToOne(targetEntity = User.class, optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "author", nullable = false, referencedColumnName = "id")
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 }

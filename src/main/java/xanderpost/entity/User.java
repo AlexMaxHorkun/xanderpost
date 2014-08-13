@@ -24,6 +24,8 @@ public class User implements UserDetails {
 
     private boolean enabled = true;
 
+    private List<Post> posts;
+
     @Id
     @Column(name = "id")
     @GeneratedValue
@@ -117,5 +119,16 @@ public class User implements UserDetails {
 
     public void eraseCredentials() {
         password = null;
+    }
+
+    @OneToMany(targetEntity = Post.class, fetch = FetchType.LAZY, mappedBy = "author", orphanRemoval = true)
+    @JsonIgnore
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+
     }
 }

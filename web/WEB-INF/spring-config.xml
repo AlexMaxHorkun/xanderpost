@@ -99,8 +99,12 @@
         </property>
     </bean>
 
-    <bean id="PostController" class="xanderpost.web.controller.PostController">
+    <bean id="postService" class="xanderpost.service.PostService">
         <property name="postDao" ref="postDao"/>
+    </bean>
+
+    <bean id="PostController" class="xanderpost.web.controller.PostController">
+        <property name="postService" ref="postService"/>
     </bean>
 
     <bean id="postDao" class="xanderpost.repository.PostDaoHbm">
@@ -108,7 +112,7 @@
     </bean>
 
     <bean id="stringToPostConverter" class="xanderpost.converter.StringToPostConverter">
-        <property name="postDao" ref="postDao"/>
+        <property name="postService" ref="postService"/>
     </bean>
 
     <bean id="userDao" class="xanderpost.repository.UserDaoHbm">

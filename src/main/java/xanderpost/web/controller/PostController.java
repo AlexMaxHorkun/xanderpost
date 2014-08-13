@@ -1,11 +1,16 @@
 package xanderpost.web.controller;
 
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import xanderpost.entity.Post;
-import xanderpost.repository.PostDaoInterface;
+import xanderpost.entity.User;
+import xanderpost.service.PostService;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -14,28 +19,34 @@ import java.util.List;
 @RestController
 @RequestMapping("/posts")
 public class PostController {
-    private PostDaoInterface postDao;
+    private PostService postService;
 
-    public PostDaoInterface getPostDao() {
-        return postDao;
+    public PostService getPostService() {
+        return postService;
     }
 
-    public void setPostDao(PostDaoInterface postDao) {
-        this.postDao = postDao;
+    public void setPostService(PostService postService) {
+        this.postService = postService;
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = {"application/json", "application/xml"})
     public ModelAndView postsListAction() {
-        List<Post> posts = (ArrayList<Post>) getPostDao().findAll();
+        List<Post> posts = (ArrayList<Post>) getPostService().findAll();
         ModelAndView response = new ModelAndView();
         response.addObject("posts", posts);
         return response;
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = {"application/json", "application/xml"})
-    public ModelAndView postAddAction(@Valid Post post) {
+    @Secured("ROLE_USER")
+    public ModelAndView postAddAction(@Valid Post post, @AuthenticationPrincipal User user, HttpServletResponse httpServletResponse) {
         ModelAndView response = new ModelAndView();
-        postDao.persist(post);
+        post.setAuthor(user);
+        try {
+            postService.persist(post);
+        } catch (DataIntegrityViolationException ex) {
+            httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
         response.addObject("post", post);
         return response;
     }
@@ -43,9 +54,9 @@ public class PostController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = {"application/json", "application/xml"})
     public ModelAndView postDeleteAction(@PathVariable long id) {
         ModelAndView response = new ModelAndView();
-        Post post = postDao.find(id);
+        Post post = postService.find(id);
         if (post != null) {
-            postDao.delete(post);
+            postService.delete(post);
         } else {
             throw new InvalidParameterException("Cannot find post with id = " + id);
         }
@@ -56,7 +67,7 @@ public class PostController {
     @RequestMapping(value = "/{post}", method = RequestMethod.PATCH, produces = {"application/json", "application/xml"})
     public ModelAndView postEditAction(@ModelAttribute Post post, BindingResult binding, ModelAndView response) {
         if (post.getId() > 0 && !binding.hasErrors()) {
-            getPostDao().save(post);
+            getPostService().save(post);
         } else {
             throw new InvalidParameterException("Post with such ID is not found");
         }
