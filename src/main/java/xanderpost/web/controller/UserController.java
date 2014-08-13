@@ -76,8 +76,11 @@ public class UserController {
 
     @RequestMapping(value = "/{u}", method = RequestMethod.DELETE, produces = {"application/json", "application/xml"})
     @Secured("ROLE_ADMIN")
-    public Model userDeleteAction(@PathVariable User u, Model response) {
-        userService.remove(u);
+    public Model userDeleteAction(@PathVariable User u, Model response, Boolean hard) {
+        if (hard == null) {
+            hard = false;
+        }
+        userService.remove(u, hard);
         response.addAttribute("user", u);
         return response;
     }
@@ -95,9 +98,28 @@ public class UserController {
         if (errors.size() > 0) {
             throw new RuntimeException("Given values are not valid");
         } else {
-            userService.save(currentUser, true); //encode password and save user
+            userService.save(currentUser, password != null); //encode password and save user
         }
         response.addAttribute("user", currentUser);
         return response;
+    }
+
+    @RequestMapping(value = "/{user}", method = RequestMethod.PATCH, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @Secured("ROLE_ADMIN")
+    public Model userEditAction(String email, String password, @PathVariable User user, Model model) {
+        if (email != null) {
+            user.setEmail(email);
+        }
+        if (password != null) {
+            user.setPassword(password);
+        }
+        Set<ConstraintViolation<User>> errors = validator.validate(user);
+        if (errors.size() > 0) {
+            throw new RuntimeException("Given values are not valid");
+        } else {
+            userService.save(user, password != null); //encode password and save user
+        }
+        model.addAttribute("user", user);
+        return model;
     }
 }
