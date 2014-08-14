@@ -3,16 +3,15 @@ package xanderpost.web.controller;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import xanderpost.entity.Post;
 import xanderpost.entity.User;
 import xanderpost.service.PostService;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,47 +29,53 @@ public class PostController {
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = {"application/json", "application/xml"})
-    public ModelAndView postsListAction() {
+    public Model postsListAction(Model model) {
         List<Post> posts = (ArrayList<Post>) getPostService().findAll();
-        ModelAndView response = new ModelAndView();
-        response.addObject("posts", posts);
-        return response;
+        model.addAttribute("posts", posts);
+        return model;
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = {"application/json", "application/xml"})
     @Secured("ROLE_USER")
-    public ModelAndView postAddAction(@Valid Post post, @AuthenticationPrincipal User user, HttpServletResponse httpServletResponse) {
-        ModelAndView response = new ModelAndView();
+    public Model postAddAction(@Valid Post post, @AuthenticationPrincipal User user, HttpServletResponse httpServletResponse, Model model) {
         post.setAuthor(user);
         try {
             postService.persist(post);
         } catch (DataIntegrityViolationException ex) {
             httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
-        response.addObject("post", post);
-        return response;
+        model.addAttribute("post", post);
+        return model;
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = {"application/json", "application/xml"})
-    public ModelAndView postDeleteAction(@PathVariable long id) {
-        ModelAndView response = new ModelAndView();
-        Post post = postService.find(id);
-        if (post != null) {
+    @RequestMapping(value = "/{post}", method = RequestMethod.DELETE, produces = {"application/json", "application/xml"})
+    @Secured("ROLE_USER")
+    public Model postDeleteAction(@PathVariable Post post, HttpServletResponse httpServletResponse, @AuthenticationPrincipal User user, Model model) {
+        if (post != null && post.getId() > 0 && (user.equals(post.getAuthor()) || user.hasRole("ROLE_ADMIN"))) {
             postService.delete(post);
+            model.addAttribute("post", post);
+        } else if (post == null || post.getId() == 0) {
+            httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
-            throw new InvalidParameterException("Cannot find post with id = " + id);
+            httpServletResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
         }
-        response.addObject("post", post);
-        return response;
+
+        return model;
     }
 
     @RequestMapping(value = "/{post}", method = RequestMethod.PATCH, produces = {"application/json", "application/xml"})
-    public ModelAndView postEditAction(@ModelAttribute Post post, BindingResult binding, ModelAndView response) {
-        if (post.getId() > 0 && !binding.hasErrors()) {
+    @Secured("ROLE_USER")
+    public Model postEditAction(@ModelAttribute Post post, BindingResult binding, @AuthenticationPrincipal User user, HttpServletResponse httpServletResponse, Model model) {
+        if (post.getId() > 0 && !binding.hasErrors() && (user.equals(post.getAuthor()) || user.hasRole("ROLE_ADMIN"))) {
             getPostService().save(post);
         } else {
-            throw new InvalidParameterException("Post with such ID is not found");
+            if (post == null || post.getId() == 0 || binding.hasErrors()) {
+                httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            } else {
+                httpServletResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            }
+            post = null;
         }
-        return response;
+        return model;
     }
 }

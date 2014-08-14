@@ -67,6 +67,17 @@ public class User implements UserDetails {
         return roles;
     }
 
+    public boolean hasRole(String role) {
+        boolean has = false;
+        for (UserRole r : getAuthorities()) {
+            if (r.getRole().equals(role)) {
+                has = true;
+                break;
+            }
+        }
+        return has;
+    }
+
     @Transient
     @JsonIgnore
     public List<UserRole> getAuthorities() {
@@ -130,5 +141,12 @@ public class User implements UserDetails {
     public void setPosts(List<Post> posts) {
         this.posts = posts;
 
+    }
+
+    public boolean equals(Object obj) {
+        if (obj instanceof User) {
+            return ((User) obj).getId() == getId();
+        }
+        return false;
     }
 }
