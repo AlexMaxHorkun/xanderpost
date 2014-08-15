@@ -1,8 +1,11 @@
 package xanderpost.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Table(name = "Post")
@@ -18,6 +21,8 @@ public class Post {
     private String text;
 
     private User author;
+
+    private List<PostRating> ratings;
 
     public Post() {
     }
@@ -64,5 +69,15 @@ public class Post {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    @OneToMany(targetEntity = PostRating.class, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "post")
+    @JsonIgnore
+    public List<PostRating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<PostRating> ratings) {
+        this.ratings = ratings;
     }
 }

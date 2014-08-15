@@ -31,6 +31,7 @@
             <list>
                 <value>xanderpost.entity.Post</value>
                 <value>xanderpost.entity.User</value>
+                <value>xanderpost.entity.PostRating</value>
                 <value>xanderpost.security.UserRole</value>
             </list>
         </property>
@@ -101,10 +102,13 @@
 
     <bean id="postService" class="xanderpost.service.PostService">
         <property name="postDao" ref="postDao"/>
+        <property name="postRatingDao" ref="postRatingDao"/>
     </bean>
 
     <bean id="PostController" class="xanderpost.web.controller.PostController">
         <property name="postService" ref="postService"/>
+        <property name="userService" ref="userService"/>
+        <property name="validator" ref="validator" />
     </bean>
 
     <bean id="postDao" class="xanderpost.repository.PostDaoHbm">
@@ -146,5 +150,8 @@
 
     <bean id="stringToUserConverter" class="xanderpost.converter.StringToUserConverter">
         <property name="userService" ref="userService" />
+    </bean>
+    <bean id="postRatingDao" class="xanderpost.repository.PostRatingDaoHbm">
+        <property name="sessionFactory" ref="ORMSessionFactory"/>
     </bean>
 </beans>

@@ -2,12 +2,15 @@ package xanderpost.service;
 
 import org.springframework.transaction.annotation.Transactional;
 import xanderpost.entity.Post;
+import xanderpost.entity.PostRating;
 import xanderpost.repository.PostDaoInterface;
+import xanderpost.repository.PostRatingDaoInterface;
 
 import java.util.Collection;
 
 public class PostService {
     private PostDaoInterface postDao;
+    private PostRatingDaoInterface postRatingDao;
 
     public PostDaoInterface getPostDao() {
         return postDao;
@@ -15,6 +18,14 @@ public class PostService {
 
     public void setPostDao(PostDaoInterface postDao) {
         this.postDao = postDao;
+    }
+
+    public PostRatingDaoInterface getPostRatingDao() {
+        return postRatingDao;
+    }
+
+    public void setPostRatingDao(PostRatingDaoInterface postRatingDao) {
+        this.postRatingDao = postRatingDao;
     }
 
     @Transactional(readOnly = true)
@@ -45,5 +56,10 @@ public class PostService {
     @Transactional
     public void save(Post p) {
         postDao.save(p);
+    }
+
+    @Transactional
+    public void persistRate(PostRating rating) {
+        postRatingDao.persist(rating);
     }
 }

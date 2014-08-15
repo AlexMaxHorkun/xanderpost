@@ -7,7 +7,6 @@ import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +17,7 @@ import xanderpost.service.UserService;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
+import javax.validation.Validator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -28,7 +28,7 @@ public class UserController {
 
     private UserService userService;
 
-    private LocalValidatorFactoryBean validator;
+    private Validator validator;
 
     public UserService getUserService() {
         return userService;
@@ -38,11 +38,11 @@ public class UserController {
         this.userService = userService;
     }
 
-    public LocalValidatorFactoryBean getValidator() {
+    public Validator getValidator() {
         return validator;
     }
 
-    public void setValidator(LocalValidatorFactoryBean validator) {
+    public void setValidator(Validator validator) {
         this.validator = validator;
     }
 

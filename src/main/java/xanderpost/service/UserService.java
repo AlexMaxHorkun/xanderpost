@@ -2,6 +2,7 @@ package xanderpost.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import xanderpost.entity.Post;
 import xanderpost.entity.User;
 import xanderpost.repository.UserDaoInterface;
 import xanderpost.repository.UserRoleDaoInterface;
@@ -116,5 +117,9 @@ public class UserService {
             u.setPassword(passwordEncoder.encode(u.getPassword()));
         }
         save(u);
+    }
+
+    public boolean isEditableBy(User u, Post p) {
+        return (u.equals(p.getAuthor()) || u.hasRole("ROLE_ADMIN"));
     }
 }
