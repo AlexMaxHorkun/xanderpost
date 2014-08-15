@@ -55,7 +55,7 @@ public class PostController {
 
     @RequestMapping(method = RequestMethod.GET, produces = {"application/json", "application/xml"})
     public Model postsListAction(Model model) {
-        List<Post> posts = (ArrayList<Post>) getPostService().findAll();
+        List<Post> posts = (ArrayList<Post>) getPostService().findAll(true);
         model.addAttribute("posts", posts);
         return model;
     }

@@ -72,7 +72,6 @@ public class Post {
     }
 
     @OneToMany(targetEntity = PostRating.class, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "post")
-    @JsonIgnore
     public List<PostRating> getRatings() {
         return ratings;
     }

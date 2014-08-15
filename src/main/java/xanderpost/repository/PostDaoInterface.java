@@ -8,9 +8,15 @@ import java.util.Collection;
 @Repository
 public interface PostDaoInterface {
 
+    public enum FetchMode{
+        FETCH_WITH_RATINGS, FETCH_PLAIN
+    }
+
     public Post find(long id);
 
     public Collection<Post> findByTitle(String t);
+
+    public Collection<Post> findAll(FetchMode fetchMode);
 
     public Collection<Post> findAll();
 
