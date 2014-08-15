@@ -8,12 +8,13 @@ import xanderpost.security.UserRole;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "User")
-public class User implements UserDetails {
+public class User implements UserDetails, Serializable {
     private long id;
 
     private String email;

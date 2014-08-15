@@ -40,7 +40,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public Collection<Post> findAll(boolean withRatings) {
-        return postDao.findAll((withRatings)? PostDaoInterface.FetchMode.FETCH_WITH_RATINGS : PostDaoInterface.FetchMode.FETCH_PLAIN);
+        return postDao.findAll((withRatings) ? PostDaoInterface.FetchMode.FETCH_WITH_RATINGS : PostDaoInterface.FetchMode.FETCH_PLAIN);
     }
 
     @Transactional(readOnly = true)

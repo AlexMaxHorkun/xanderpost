@@ -1,15 +1,17 @@
 package xanderpost.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "Post")
-public class Post {
+public class Post implements Serializable {
     private long id;
 
     @NotNull
@@ -72,6 +74,7 @@ public class Post {
     }
 
     @OneToMany(targetEntity = PostRating.class, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "post")
+    @Fetch(FetchMode.JOIN)
     public List<PostRating> getRatings() {
         return ratings;
     }

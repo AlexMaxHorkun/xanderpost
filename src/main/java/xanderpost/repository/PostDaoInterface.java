@@ -8,7 +8,7 @@ import java.util.Collection;
 @Repository
 public interface PostDaoInterface {
 
-    public enum FetchMode{
+    public enum FetchMode {
         FETCH_WITH_RATINGS, FETCH_PLAIN
     }
 

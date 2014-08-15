@@ -1,12 +1,8 @@
 package xanderpost.repository;
 
-import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.sql.JoinType;
 import org.springframework.stereotype.Repository;
 import xanderpost.entity.Post;
 
@@ -36,11 +32,14 @@ public class PostDaoHbm implements PostDaoInterface {
 
     public Collection<Post> findAll(FetchMode fetchMode) {
         Session orm = sessionFactory.getCurrentSession();
-        Criteria criteria=orm.createCriteria(Post.class);
-        if(fetchMode==FetchMode.FETCH_WITH_RATINGS){
-            criteria.setFetchMode("ratings", org.hibernate.FetchMode.JOIN);
+        switch (fetchMode) {
+            case FETCH_PLAIN:
+                return orm.createQuery("from Post post").list();
+            case FETCH_WITH_RATINGS:
+                return orm.createQuery("from Post post join fetch post.ratings").list();
+            default:
+                return null;
         }
-        return (Collection<Post>) criteria.list();
     }
 
     public Collection<Post> findAll() {
