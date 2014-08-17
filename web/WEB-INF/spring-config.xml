@@ -154,4 +154,6 @@
     <bean id="postRatingDao" class="xanderpost.repository.PostRatingDaoHbm">
         <property name="sessionFactory" ref="ORMSessionFactory"/>
     </bean>
+
+    <bean id="postRatingValidator" class="xanderpost.entity.validation.PostRatingValidator"/>
 </beans>

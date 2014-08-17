@@ -6,10 +6,12 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import xanderpost.entity.Post;
 import xanderpost.entity.PostRating;
 import xanderpost.entity.User;
+import xanderpost.entity.validation.PostRatingValidator;
 import xanderpost.service.PostService;
 import xanderpost.service.UserService;
 
@@ -28,6 +30,8 @@ public class PostController {
     private UserService userService;
 
     private Validator validator;
+
+    private PostRatingValidator postRatingValidator;
 
     public PostService getPostService() {
         return postService;
@@ -51,6 +55,14 @@ public class PostController {
 
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    public PostRatingValidator getPostRatingValidator() {
+        return postRatingValidator;
+    }
+
+    public void setPostRatingValidator(PostRatingValidator postRatingValidator) {
+        this.postRatingValidator = postRatingValidator;
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = {"application/json", "application/xml"})
