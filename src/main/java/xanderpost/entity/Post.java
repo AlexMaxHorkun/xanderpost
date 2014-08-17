@@ -1,5 +1,6 @@
 package xanderpost.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -14,12 +15,8 @@ import java.util.List;
 public class Post implements Serializable {
     private long id;
 
-    @NotNull
-    @Size(max = 255, min = 3)
     private String title;
 
-    @NotNull
-    @Size(max = 4000, min = 3)
     private String text;
 
     private User author;
@@ -46,6 +43,8 @@ public class Post implements Serializable {
     }
 
     @Column(name = "title", length = 255, unique = false, nullable = false)
+    @NotNull
+    @Size(max = 255, min = 3)
     public String getTitle() {
         return title;
     }
@@ -55,6 +54,8 @@ public class Post implements Serializable {
     }
 
     @Column(name = "text", length = 4000, unique = false, nullable = false)
+    @NotNull
+    @Size(max = 4000, min = 3)
     public String getText() {
         return text;
     }
@@ -75,6 +76,7 @@ public class Post implements Serializable {
 
     @OneToMany(targetEntity = PostRating.class, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "post")
     @Fetch(FetchMode.JOIN)
+    @JsonIgnore
     public List<PostRating> getRatings() {
         return ratings;
     }
