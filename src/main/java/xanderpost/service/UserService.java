@@ -9,6 +9,7 @@ import xanderpost.repository.UserRoleDaoInterface;
 import xanderpost.security.UserRole;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 public class UserService {
     private UserDaoInterface userDao;
@@ -63,11 +64,16 @@ public class UserService {
 
     @Transactional
     public void persist(User u) {
-        u.setPassword(passwordEncoder.encode(u.getPassword()));
         if (u.getRoles() == null || u.getRoles().isEmpty()) {
             persist(u, stdRoles);
         }
-        userDao.persist(u);
+        else {
+            Logger log = Logger.getLogger(getClass().toString());
+            log.info("new User's [" + u.getEmail() + "] password = " + u.getPassword());
+            u.setPassword(passwordEncoder.encode(u.getPassword()));
+            log.info("new User's [" + u.getEmail() + "] encoded password = " + u.getPassword());
+            userDao.persist(u);
+        }
     }
 
     @Transactional
