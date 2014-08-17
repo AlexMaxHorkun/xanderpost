@@ -1,5 +1,7 @@
 package xanderpost.entity;
 
+import xanderpost.entity.validation.PostRatingNotAuthor;
+
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -8,6 +10,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "PostRating", uniqueConstraints = @UniqueConstraint(columnNames = {"post_id", "user_id"}))
+@PostRatingNotAuthor
 public class PostRating implements Serializable {
 
     private Post post;

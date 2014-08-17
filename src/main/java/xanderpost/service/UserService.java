@@ -66,8 +66,7 @@ public class UserService {
     public void persist(User u) {
         if (u.getRoles() == null || u.getRoles().isEmpty()) {
             persist(u, stdRoles);
-        }
-        else {
+        } else {
             Logger log = Logger.getLogger(getClass().toString());
             log.info("new User's [" + u.getEmail() + "] password = " + u.getPassword());
             u.setPassword(passwordEncoder.encode(u.getPassword()));
