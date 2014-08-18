@@ -37,6 +37,8 @@ public class PostDaoHbm implements PostDaoInterface {
                 return orm.createQuery("from Post post").list();
             case FETCH_WITH_RATINGS:
                 return orm.createQuery("from Post post join fetch post.ratings").list();
+            case FETCH_WITH_AVG_RATING:
+                return orm.createQuery("select p.id, p.title, p.text, p.author, avg(r.rate) as avgRating from Post p left join p.ratings as r group by r.post").list();
             default:
                 return null;
         }

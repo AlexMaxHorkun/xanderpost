@@ -10,6 +10,9 @@ public class PostRatingNotAuthorValidator implements ConstraintValidator<PostRat
     }
 
     public boolean isValid(PostRating rating, ConstraintValidatorContext context) {
-        return !(rating.getUser().equals(rating.getPost().getAuthor()));
+        return !(rating.getUser()
+                .equals(rating
+                        .getPost()
+                        .getAuthor()));
     }
 }

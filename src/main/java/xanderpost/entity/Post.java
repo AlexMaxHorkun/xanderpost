@@ -1,8 +1,6 @@
 package xanderpost.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -22,6 +20,8 @@ public class Post implements Serializable {
     private User author;
 
     private List<PostRating> ratings;
+
+    private Float avgRating;
 
     public Post() {
     }
@@ -82,5 +82,14 @@ public class Post implements Serializable {
 
     public void setRatings(List<PostRating> ratings) {
         this.ratings = ratings;
+    }
+
+    @Transient
+    public Float getAvgRating() {
+        return avgRating;
+    }
+
+    public void setAvgRating(Float avgRating) {
+        this.avgRating = avgRating;
     }
 }
