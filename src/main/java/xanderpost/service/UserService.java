@@ -4,7 +4,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import xanderpost.entity.Post;
 import xanderpost.entity.User;
+import xanderpost.entity.readonly.UserInfo;
 import xanderpost.repository.UserDaoInterface;
+import xanderpost.repository.UserInfoDaoInterface;
 import xanderpost.repository.UserRoleDaoInterface;
 import xanderpost.security.UserRole;
 
@@ -19,6 +21,8 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     private String[] stdRoles;
+
+    private UserInfoDaoInterface userInfoDao;
 
     public enum FetchMode {
         FETCH_PLAIN, FETCH_WITH_ROLES
@@ -54,6 +58,14 @@ public class UserService {
 
     public void setStdRoles(String[] stdRoles) {
         this.stdRoles = stdRoles;
+    }
+
+    public UserInfoDaoInterface getUserInfoDao() {
+        return userInfoDao;
+    }
+
+    public void setUserInfoDao(UserInfoDaoInterface userInfoDao) {
+        this.userInfoDao = userInfoDao;
     }
 
     protected void fetchUser(User u, FetchMode fetchMode) {
@@ -122,6 +134,16 @@ public class UserService {
             u.setPassword(passwordEncoder.encode(u.getPassword()));
         }
         save(u);
+    }
+
+    @Transactional(readOnly = true)
+    public UserInfo findUserInfo(long id) {
+        return userInfoDao.find(id);
+    }
+
+    @Transactional(readOnly = true)
+    public UserInfo findUserInfo(User u) {
+        return findUserInfo(u.getId());
     }
 
     public boolean isEditableBy(User u, Post p) {

@@ -33,6 +33,7 @@
                 <value>xanderpost.entity.User</value>
                 <value>xanderpost.entity.PostRating</value>
                 <value>xanderpost.security.UserRole</value>
+                <value>xanderpost.entity.readonly.UserInfo</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -146,12 +147,17 @@
                 <value>ROLE_USER</value>
             </array>
         </property>
+        <property name="userInfoDao" ref="userInfoDao"/>
     </bean>
 
     <bean id="stringToUserConverter" class="xanderpost.converter.StringToUserConverter">
         <property name="userService" ref="userService" />
     </bean>
     <bean id="postRatingDao" class="xanderpost.repository.PostRatingDaoHbm">
+        <property name="sessionFactory" ref="ORMSessionFactory"/>
+    </bean>
+
+    <bean id="userInfoDao" class="xanderpost.repository.UserInfoDaoHbm">
         <property name="sessionFactory" ref="ORMSessionFactory"/>
     </bean>
 </beans>

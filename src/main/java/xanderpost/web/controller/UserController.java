@@ -50,7 +50,7 @@ public class UserController {
     @Secured("ROLE_USER")
     public Map<String, Object> currentAction(@AuthenticationPrincipal User user) {
         HashMap<String, Object> response = new HashMap<String, Object>();
-        response.put("user", user);
+        response.put("user", userService.findUserInfo(user));
         return response;
     }
 
