@@ -5,7 +5,13 @@ import xanderpost.entity.User;
 
 @Repository
 public interface UserDaoInterface {
+    public enum FetchMode {
+        FETCH_PLAIN, FETCH_WITH_RATINGS
+    }
+
     public User find(long id);
+
+    public User find(long id, FetchMode fetchMode);
 
     public User findByEmail(String e);
 

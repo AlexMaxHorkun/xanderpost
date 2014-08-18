@@ -19,8 +19,20 @@ public class UserDaoHbm implements UserDaoInterface {
     }
 
     public User find(long id) {
+        return find(id, FetchMode.FETCH_PLAIN);
+    }
+
+    public User find(long id, FetchMode fetchMode) {
         Session orm = getSessionFactory().getCurrentSession();
-        return (User) orm.get(User.class, id);
+        User user = null;
+        switch (fetchMode) {
+            case FETCH_PLAIN:
+                user = (User) orm.get(User.class, id);
+                break;
+            case FETCH_WITH_RATINGS:
+                user = (User) orm.createQuery("from User u left join fetch u.ratings where id=:id").setParameter("id", id).uniqueResult();
+        }
+        return user;
     }
 
     public User findByEmail(String e) {

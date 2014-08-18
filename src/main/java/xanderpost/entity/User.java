@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "User")
@@ -26,6 +27,8 @@ public class User implements UserDetails, Serializable {
     private boolean enabled = true;
 
     private List<Post> posts;
+
+    private Set<PostRating> ratings;
 
     @Id
     @Column(name = "id")
@@ -141,7 +144,16 @@ public class User implements UserDetails, Serializable {
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
+    }
 
+    @OneToMany(targetEntity = PostRating.class, fetch = FetchType.LAZY, mappedBy = "user", orphanRemoval = true)
+    @JsonIgnore
+    public Set<PostRating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Set<PostRating> ratings) {
+        this.ratings = ratings;
     }
 
     public boolean equals(Object obj) {
