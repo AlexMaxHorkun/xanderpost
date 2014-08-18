@@ -75,7 +75,6 @@ public class Post implements Serializable {
     }
 
     @OneToMany(targetEntity = PostRating.class, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "post")
-    @Fetch(FetchMode.JOIN)
     @JsonIgnore
     public List<PostRating> getRatings() {
         return ratings;
