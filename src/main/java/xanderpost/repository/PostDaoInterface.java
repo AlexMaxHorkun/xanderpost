@@ -25,4 +25,6 @@ public interface PostDaoInterface {
     public void delete(Post p);
 
     public void save(Post p);
+
+    public Post fetchRatings(Post p);
 }

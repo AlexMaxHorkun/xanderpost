@@ -67,4 +67,9 @@ public class PostService {
     public void persistRate(PostRating rating) {
         postRatingDao.persist(rating);
     }
+
+    @Transactional(readOnly = true)
+    public Post fetchRatings(Post p) {
+        return postDao.fetchRatings(p);
+    }
 }

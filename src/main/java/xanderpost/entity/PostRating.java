@@ -1,5 +1,6 @@
 package xanderpost.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import xanderpost.entity.validation.PostRatingNotAuthor;
 
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "PostRating", uniqueConstraints = @UniqueConstraint(columnNames = {"post_id", "user_id"}))
@@ -18,6 +20,8 @@ public class PostRating implements Serializable {
     private User user;
 
     private int rate;
+
+    private Date created;
 
     private long id;
 
@@ -43,6 +47,7 @@ public class PostRating implements Serializable {
     @ManyToOne(targetEntity = Post.class, fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "post_id", referencedColumnName = "id", nullable = false)
     @NotNull
+    @JsonIgnore
     public Post getPost() {
         return post;
     }
@@ -54,6 +59,7 @@ public class PostRating implements Serializable {
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     @NotNull
+    @JsonIgnore
     public User getUser() {
         return user;
     }
@@ -72,5 +78,14 @@ public class PostRating implements Serializable {
 
     public void setRate(int rate) {
         this.rate = rate;
+    }
+
+    @Column(name = "created", nullable = false, columnDefinition = "default CURRENT_TIMESTAMP")
+    public Date getCreated() {
+        return created;
+    }
+
+    protected void setCreated(Date created) {
+        this.created = created;
     }
 }

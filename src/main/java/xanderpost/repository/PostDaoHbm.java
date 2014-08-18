@@ -65,4 +65,11 @@ public class PostDaoHbm implements PostDaoInterface {
         orm.update(p);
         orm.flush();
     }
+
+    public Post fetchRatings(Post p) {
+        Session orm = sessionFactory.getCurrentSession();
+        Post p2 = (Post) orm.merge(p);
+        p2.getRatings().size();
+        return p2;
+    }
 }

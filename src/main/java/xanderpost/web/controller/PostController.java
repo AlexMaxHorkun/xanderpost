@@ -60,6 +60,13 @@ public class PostController {
         return model;
     }
 
+    @RequestMapping(value = "/{post}/rate", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public Model postRatingsAction(@PathVariable Post post, Model model) {
+        post = postService.fetchRatings(post);
+        model.addAttribute("post_ratings", post.getRatings());
+        return model;
+    }
+
     @RequestMapping(method = RequestMethod.POST, produces = {"application/json", "application/xml"})
     @Secured("ROLE_USER")
     public Model postAddAction(@Valid Post post, @AuthenticationPrincipal User user, HttpServletResponse httpServletResponse, Model model) {
