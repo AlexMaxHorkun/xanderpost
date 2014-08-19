@@ -7,6 +7,7 @@ import xanderpost.repository.PostDaoInterface;
 import xanderpost.repository.PostRatingDaoInterface;
 
 import java.util.Collection;
+import java.util.Date;
 
 public class PostService {
     private PostDaoInterface postDao;
@@ -60,6 +61,7 @@ public class PostService {
 
     @Transactional
     public void save(Post p) {
+        p.setLastEdited(new Date());
         postDao.save(p);
     }
 

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Авг 18 2014 г., 13:26
+-- Время создания: Авг 19 2014 г., 17:48
 -- Версия сервера: 5.5.38-0ubuntu0.14.04.1
 -- Версия PHP: 5.5.9-1ubuntu4.3
 
@@ -31,16 +31,11 @@ CREATE TABLE IF NOT EXISTS `Post` (
   `title` varchar(255) NOT NULL,
   `text` varchar(4000) NOT NULL,
   `author` int(11) NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_edited` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `author` (`author`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
-
---
--- Дамп данных таблицы `Post`
---
-
-INSERT INTO `Post` (`id`, `title`, `text`, `author`) VALUES
-(8, 'brand_new_post_1703', 'somenew_text321', 1);
+  KEY `Post_ibfk_1` (`author`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 -- --------------------------------------------------------
 
@@ -53,17 +48,11 @@ CREATE TABLE IF NOT EXISTS `PostRating` (
   `post_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `rate` smallint(6) NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`,`post_id`),
-  KEY `post_id` (`post_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
-
---
--- Дамп данных таблицы `PostRating`
---
-
-INSERT INTO `PostRating` (`id`, `post_id`, `user_id`, `rate`) VALUES
-(2, 8, 12, 7);
+  KEY `PostRating_ibfk_2` (`post_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 -- --------------------------------------------------------
 
@@ -78,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `User` (
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
 
 --
 -- Дамп данных таблицы `User`
@@ -87,7 +76,8 @@ CREATE TABLE IF NOT EXISTS `User` (
 INSERT INTO `User` (`id`, `email`, `password`, `enabled`) VALUES
 (1, 'test@test.com', '$2a$04$zjHuPJ1YoPowVLFohaCjeOumqI7bb88//GBh4qDvwJO9Rt48TKL9i', 1),
 (2, 'admin@test.com', '$2a$04$GNOzn0dLRiGChAXCCz0fQekQ3AfeU3XavSSGoKtm8k9wLQJ.s6Vqq', 1),
-(12, 'newtest@test.com', '$2a$10$5ffPvVsZ/dshxI/D98OPw.q.vzb6vK9Nf0Q/XlAkIv5kGbrTtXaDq', 1);
+(12, 'newtest@test.com', '$2a$10$5ffPvVsZ/dshxI/D98OPw.q.vzb6vK9Nf0Q/XlAkIv5kGbrTtXaDq', 1),
+(13, 'newtest1@test.com', '$2a$10$Oh.6kJYrevw6HdZTJQX0JuAEJolXYZh9y6wlW92f433L1fHo./kbS', 1);
 
 -- --------------------------------------------------------
 
@@ -101,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `UserRole` (
   `parent_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `role` (`role`),
-  KEY `parent_id` (`parent_id`)
+  KEY `UserRole_ibfk_1` (`parent_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
@@ -132,7 +122,8 @@ CREATE TABLE IF NOT EXISTS `user_role` (
 INSERT INTO `user_role` (`user_id`, `role_id`) VALUES
 (2, 2),
 (1, 3),
-(12, 3);
+(12, 3),
+(13, 3);
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
@@ -142,20 +133,20 @@ INSERT INTO `user_role` (`user_id`, `role_id`) VALUES
 -- Ограничения внешнего ключа таблицы `Post`
 --
 ALTER TABLE `Post`
-  ADD CONSTRAINT `Post_ibfk_1` FOREIGN KEY (`author`) REFERENCES `User` (`id`);
+  ADD CONSTRAINT `Post_ibfk_1` FOREIGN KEY (`author`) REFERENCES `User` (`id`) ON DELETE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `PostRating`
 --
 ALTER TABLE `PostRating`
-  ADD CONSTRAINT `PostRating_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `Post` (`id`),
-  ADD CONSTRAINT `PostRating_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `User` (`id`);
+  ADD CONSTRAINT `PostRating_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `User` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `PostRating_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `Post` (`id`) ON DELETE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `UserRole`
 --
 ALTER TABLE `UserRole`
-  ADD CONSTRAINT `UserRole_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `UserRole` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `UserRole_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `UserRole` (`id`) ON DELETE SET NULL;
 
 --
 -- Ограничения внешнего ключа таблицы `user_role`

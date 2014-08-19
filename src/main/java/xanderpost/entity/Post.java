@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -20,6 +21,10 @@ public class Post implements Serializable {
     private User author;
 
     private List<PostRating> ratings;
+
+    private Date created;
+
+    private Date lastEdited;
 
     private Float avgRating;
 
@@ -64,7 +69,7 @@ public class Post implements Serializable {
         this.text = text;
     }
 
-    @ManyToOne(targetEntity = User.class, optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = User.class, optional = false, fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE})
     @JoinColumn(name = "author", nullable = false, referencedColumnName = "id")
     public User getAuthor() {
         return author;
@@ -91,5 +96,23 @@ public class Post implements Serializable {
 
     public void setAvgRating(Float avgRating) {
         this.avgRating = avgRating;
+    }
+
+    @Column(name = "created", nullable = false, columnDefinition = "default CURRENT_TIMESTAMP")
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    @Column(name = "last_edited", nullable = true, columnDefinition = "default CURRENT_TIMESTAMP")
+    public Date getLastEdited() {
+        return lastEdited;
+    }
+
+    public void setLastEdited(Date lastEdited) {
+        this.lastEdited = lastEdited;
     }
 }

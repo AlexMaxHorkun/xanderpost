@@ -44,7 +44,7 @@ public class PostRating implements Serializable {
         this.id = id;
     }
 
-    @ManyToOne(targetEntity = Post.class, fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(targetEntity = Post.class, fetch = FetchType.EAGER, optional = false, cascade = {CascadeType.REMOVE})
     @JoinColumn(name = "post_id", referencedColumnName = "id", nullable = false)
     @NotNull
     @JsonIgnore
@@ -56,7 +56,7 @@ public class PostRating implements Serializable {
         this.post = post;
     }
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = false, cascade = {CascadeType.REMOVE})
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     @NotNull
     @JsonIgnore
