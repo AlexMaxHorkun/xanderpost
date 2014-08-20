@@ -40,13 +40,18 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Collection<Post> findAll(boolean withRatings) {
-        return postDao.findAll((withRatings) ? PostDaoInterface.FetchMode.FETCH_WITH_AVG_RATING : PostDaoInterface.FetchMode.FETCH_PLAIN);
+    public Collection<Post> findAll(boolean withRatings, int limit, int offset) {
+        return postDao.findAll((withRatings) ? PostDaoInterface.FetchMode.FETCH_WITH_AVG_RATING : PostDaoInterface.FetchMode.FETCH_PLAIN, limit, offset);
     }
 
     @Transactional(readOnly = true)
     public Collection<Post> findAll() {
-        return findAll(false);
+        return findAll(false, 0, 0);
+    }
+
+    @Transactional(readOnly = true)
+    public Collection<Post> findAll(boolean withRatings, int limit) {
+        return postDao.findAll((withRatings) ? PostDaoInterface.FetchMode.FETCH_WITH_AVG_RATING : PostDaoInterface.FetchMode.FETCH_PLAIN, limit, 0);
     }
 
     @Transactional

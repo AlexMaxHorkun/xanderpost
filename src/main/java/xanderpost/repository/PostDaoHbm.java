@@ -1,5 +1,6 @@
 package xanderpost.repository;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -30,22 +31,29 @@ public class PostDaoHbm implements PostDaoInterface {
         return (Collection<Post>) orm.createCriteria(Post.class).add(Restrictions.eq("title", t)).list();
     }
 
-    public Collection<Post> findAll(FetchMode fetchMode) {
+    public Collection<Post> findAll(FetchMode fetchMode, int limit, int offset) {
         Session orm = sessionFactory.getCurrentSession();
+        Query query = null;
         switch (fetchMode) {
             case FETCH_PLAIN:
-                return orm.createQuery("from Post post").list();
+                query = orm.createQuery("from Post post");
+                break;
             case FETCH_WITH_RATINGS:
-                return orm.createQuery("from Post post join fetch post.ratings").list();
+                query = orm.createQuery("from Post post join fetch post.ratings");
             case FETCH_WITH_AVG_RATING:
-                return orm.createQuery("select p.id, p.title, p.text, p.author, p.created, p.lastEdited, avg(r.rate) as avgRating from Post p left join p.ratings as r group by r.post").list();
-            default:
-                return null;
+                query = orm.createQuery("select p.id, p.title, p.text, p.author, p.created, p.lastEdited, avg(r.rate) as avgRating from Post p left join p.ratings as r group by p.id");
         }
-    }
-
-    public Collection<Post> findAll() {
-        return findAll(FetchMode.FETCH_PLAIN);
+        if (query != null) {
+            if (limit > 0) {
+                query.setMaxResults(limit);
+            }
+            if (offset > 0) {
+                query.setFirstResult(offset);
+            }
+            return query.list();
+        } else {
+            return null;
+        }
     }
 
     public void persist(Post p) {

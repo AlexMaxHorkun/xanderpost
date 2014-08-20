@@ -16,9 +16,7 @@ public interface PostDaoInterface {
 
     public Collection<Post> findByTitle(String t);
 
-    public Collection<Post> findAll(FetchMode fetchMode);
-
-    public Collection<Post> findAll();
+    public Collection<Post> findAll(FetchMode fetchMode, int limit, int offset);
 
     public void persist(Post p);
 
