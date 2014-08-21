@@ -34,6 +34,11 @@ public class Post implements Serializable {
         this.title = title;
     }
 
+    public Post(String t, String text, User author) {
+        this(t, text);
+        setAuthor(author);
+    }
+
     @Id
     @Column(name = "id")
     @GeneratedValue

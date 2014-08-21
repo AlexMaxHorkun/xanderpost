@@ -11,7 +11,7 @@
 
     <!-- Rest authentication entry point configuration -->
     <http entry-point-ref="authenticationEntryPoint" authentication-manager-ref="authenticationManager">
-        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <intercept-url pattern="/WEB-INF" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <http-basic/>
         <logout/>
     </http>
@@ -22,7 +22,7 @@
         </authentication-provider>
     </authentication-manager>
 
-    <global-method-security jsr250-annotations="enabled" authentication-manager-ref="authenticationManager"
+    <global-method-security authentication-manager-ref="authenticationManager"
                             secured-annotations="enabled"/>
 
     <beans:bean id="basicAuthenticationFilter"
