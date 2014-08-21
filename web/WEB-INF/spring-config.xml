@@ -37,6 +37,7 @@
                 <value>xanderpost.entity.PostRating</value>
                 <value>xanderpost.security.UserRole</value>
                 <value>xanderpost.entity.readonly.UserInfo</value>
+                <value>xanderpost.entity.readonly.PostInfo</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -107,6 +108,7 @@
     <bean id="postService" class="xanderpost.service.PostService">
         <property name="postDao" ref="postDao"/>
         <property name="postRatingDao" ref="postRatingDao"/>
+        <property name="postInfoDao" ref="postInfoDao" />
     </bean>
 
     <bean id="PostController" class="xanderpost.web.controller.PostController">
@@ -162,5 +164,9 @@
 
     <bean id="userInfoDao" class="xanderpost.repository.UserInfoDaoHbm">
         <property name="sessionFactory" ref="ORMSessionFactory"/>
+    </bean>
+
+    <bean id="postInfoDao" class="xanderpost.repository.PostInfoDaoHbm">
+        <property name="sessionFactory" ref="ORMSessionFactory" />
     </bean>
 </beans>

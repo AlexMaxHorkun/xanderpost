@@ -40,8 +40,6 @@ public class PostDaoHbm implements PostDaoInterface {
                 break;
             case FETCH_WITH_RATINGS:
                 query = orm.createQuery("from Post post join fetch post.ratings");
-            case FETCH_WITH_AVG_RATING:
-                query = orm.createQuery("select p.id, p.title, p.text, p.author, p.created, p.lastEdited, avg(r.rate) as avgRating from Post p left join p.ratings as r group by p.id");
         }
         if (query != null) {
             if (limit > 0) {

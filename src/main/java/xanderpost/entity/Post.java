@@ -26,8 +26,6 @@ public class Post implements Serializable {
 
     private Date lastEdited;
 
-    private Float avgRating;
-
     public Post() {
     }
 
@@ -87,15 +85,6 @@ public class Post implements Serializable {
 
     public void setRatings(List<PostRating> ratings) {
         this.ratings = ratings;
-    }
-
-    @Transient
-    public Float getAvgRating() {
-        return avgRating;
-    }
-
-    public void setAvgRating(Float avgRating) {
-        this.avgRating = avgRating;
     }
 
     @Column(name = "created", nullable = false, columnDefinition = "default CURRENT_TIMESTAMP")

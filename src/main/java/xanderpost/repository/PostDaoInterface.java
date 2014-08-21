@@ -9,7 +9,7 @@ import java.util.Collection;
 public interface PostDaoInterface {
 
     public enum FetchMode {
-        FETCH_WITH_RATINGS, FETCH_PLAIN, FETCH_WITH_AVG_RATING
+        FETCH_WITH_RATINGS, FETCH_PLAIN
     }
 
     public Post find(long id);

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import xanderpost.entity.Post;
 import xanderpost.entity.PostRating;
 import xanderpost.entity.User;
+import xanderpost.entity.readonly.PostInfo;
 import xanderpost.service.PostService;
 import xanderpost.service.UserService;
 
@@ -17,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.Validator;
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -61,7 +61,7 @@ public class PostController {
         if (offset == null) {
             offset = 0;
         }
-        List<Post> posts = (ArrayList<Post>) getPostService().findAll(true, limit, offset);
+        List<PostInfo> posts = getPostService().findAllInfo(limit, offset);
         model.addAttribute("posts", posts);
         return model;
     }
