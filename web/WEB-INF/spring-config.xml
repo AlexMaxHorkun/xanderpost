@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -10,10 +9,10 @@
         http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd
-        http://www.springframework.org/schema/aop
-        http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:property-placeholder location="classpath:jdbc.properties" />
+         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath:jdbc.properties"/>
 
     <mvc:annotation-driven conversion-service="conversionService">
         <mvc:argument-resolvers>
@@ -53,6 +52,7 @@
         <property name="aliases">
             <props>
                 <prop key="post">xanderpost.entity.Post</prop>
+                <prop key="post">xanderpost.entity.readonly.PostInfo</prop>
             </props>
         </property>
     </bean>
@@ -93,14 +93,14 @@
         <property name="hibernateManagedSession" value="false"/>
     </bean>
 
-    <tx:annotation-driven transaction-manager="txManager" />
+    <tx:annotation-driven transaction-manager="txManager"/>
 
     <bean id="conversionService"
           class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
             <set>
                 <ref bean="stringToPostConverter"/>
-                <ref bean="stringToUserConverter" />
+                <ref bean="stringToUserConverter"/>
             </set>
         </property>
     </bean>
@@ -108,13 +108,13 @@
     <bean id="postService" class="xanderpost.service.PostService">
         <property name="postDao" ref="postDao"/>
         <property name="postRatingDao" ref="postRatingDao"/>
-        <property name="postInfoDao" ref="postInfoDao" />
+        <property name="postInfoDao" ref="postInfoDao"/>
     </bean>
 
     <bean id="PostController" class="xanderpost.web.controller.PostController">
         <property name="postService" ref="postService"/>
         <property name="userService" ref="userService"/>
-        <property name="validator" ref="validator" />
+        <property name="validator" ref="validator"/>
     </bean>
 
     <bean id="postDao" class="xanderpost.repository.PostDaoHbm">
@@ -136,18 +136,18 @@
 
     <bean id="userController" class="xanderpost.web.controller.UserController">
         <property name="userService" ref="userService"/>
-        <property name="validator" ref="validator" />
+        <property name="validator" ref="validator"/>
     </bean>
 
-    <bean id="userRoleDao" class="xanderpost.repository.UserRoleDaoHbm" >
+    <bean id="userRoleDao" class="xanderpost.repository.UserRoleDaoHbm">
         <property name="sessionFactory" ref="ORMSessionFactory"/>
     </bean>
 
     <bean id="userService" class="xanderpost.service.UserService">
         <property name="userDao" ref="userDao"/>
-        <property name="userRoleDao" ref="userRoleDao" />
-        <property name="passwordEncoder" ref="passwordEncoder" />
-        <property name="stdRoles" >
+        <property name="userRoleDao" ref="userRoleDao"/>
+        <property name="passwordEncoder" ref="passwordEncoder"/>
+        <property name="stdRoles">
             <array value-type="java.lang.String">
                 <value>ROLE_USER</value>
             </array>
@@ -156,7 +156,7 @@
     </bean>
 
     <bean id="stringToUserConverter" class="xanderpost.converter.StringToUserConverter">
-        <property name="userService" ref="userService" />
+        <property name="userService" ref="userService"/>
     </bean>
     <bean id="postRatingDao" class="xanderpost.repository.PostRatingDaoHbm">
         <property name="sessionFactory" ref="ORMSessionFactory"/>
@@ -167,6 +167,6 @@
     </bean>
 
     <bean id="postInfoDao" class="xanderpost.repository.PostInfoDaoHbm">
-        <property name="sessionFactory" ref="ORMSessionFactory" />
+        <property name="sessionFactory" ref="ORMSessionFactory"/>
     </bean>
 </beans>
