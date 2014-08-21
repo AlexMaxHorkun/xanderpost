@@ -22,11 +22,11 @@ public class User implements UserDetails, Serializable {
 
     private String password;
 
-    private List<UserRole> roles = new ArrayList<UserRole>();
+    private Set<UserRole> roles;
 
     private boolean enabled = true;
 
-    private List<Post> posts;
+    private Set<Post> posts;
 
     private Set<PostRating> ratings;
 
@@ -67,7 +67,7 @@ public class User implements UserDetails, Serializable {
 
     @ManyToMany(targetEntity = UserRole.class, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    public List<UserRole> getRoles() {
+    public Set<UserRole> getRoles() {
         return roles;
     }
 
@@ -93,7 +93,7 @@ public class User implements UserDetails, Serializable {
         return authorities;
     }
 
-    public void setRoles(List<UserRole> roles) {
+    public void setRoles(Set<UserRole> roles) {
         this.roles = roles;
     }
 
@@ -138,11 +138,11 @@ public class User implements UserDetails, Serializable {
 
     @OneToMany(targetEntity = Post.class, fetch = FetchType.LAZY, mappedBy = "author", orphanRemoval = true)
     @JsonIgnore
-    public List<Post> getPosts() {
+    public Set<Post> getPosts() {
         return posts;
     }
 
-    public void setPosts(List<Post> posts) {
+    public void setPosts(Set<Post> posts) {
         this.posts = posts;
     }
 

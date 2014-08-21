@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import xanderpost.entity.User;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "UserRole")
@@ -16,9 +15,9 @@ public class UserRole implements org.springframework.security.core.GrantedAuthor
 
     private UserRole parent;
 
-    private List<UserRole> childRoles = new ArrayList<UserRole>();
+    private Set<UserRole> childRoles;
 
-    private List<User> users = new ArrayList<User>();
+    private Set<User> users;
 
     public UserRole() {
     }
@@ -59,12 +58,12 @@ public class UserRole implements org.springframework.security.core.GrantedAuthor
 
     @JsonIgnore
     @OneToMany(targetEntity = UserRole.class, mappedBy = "parent", orphanRemoval = false, fetch = FetchType.LAZY)
-    public List<UserRole> getChildRoles() {
+    public Set<UserRole> getChildRoles() {
         return childRoles;
     }
 
     @JsonIgnore
-    public void setChildRoles(List<UserRole> childRoles) {
+    public void setChildRoles(Set<UserRole> childRoles) {
         this.childRoles = childRoles;
     }
 
@@ -77,12 +76,12 @@ public class UserRole implements org.springframework.security.core.GrantedAuthor
     @JsonIgnore
     @ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
     @JsonIgnore
-    public void setUsers(List<User> users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 }

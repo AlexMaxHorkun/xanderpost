@@ -10,6 +10,7 @@ import xanderpost.repository.UserInfoDaoInterface;
 import xanderpost.repository.UserRoleDaoInterface;
 import xanderpost.security.UserRole;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -90,7 +91,7 @@ public class UserService {
     @Transactional
     public void persist(User u, String[] roles) {
         List<UserRole> roleList = userRoleDao.findByRoles(roles);
-        u.setRoles(roleList);
+        u.setRoles(new HashSet<UserRole>(roleList));
         persist(u);
     }
 

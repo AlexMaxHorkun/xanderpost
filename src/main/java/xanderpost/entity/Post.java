@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "Post")
@@ -20,7 +20,7 @@ public class Post implements Serializable {
 
     private User author;
 
-    private List<PostRating> ratings;
+    private Set<PostRating> ratings;
 
     private Date created;
 
@@ -79,11 +79,11 @@ public class Post implements Serializable {
 
     @OneToMany(targetEntity = PostRating.class, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "post")
     @JsonIgnore
-    public List<PostRating> getRatings() {
+    public Set<PostRating> getRatings() {
         return ratings;
     }
 
-    public void setRatings(List<PostRating> ratings) {
+    public void setRatings(Set<PostRating> ratings) {
         this.ratings = ratings;
     }
 
