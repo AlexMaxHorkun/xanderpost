@@ -80,8 +80,11 @@ public class PostRating implements Serializable {
         this.rate = rate;
     }
 
-    @Column(name = "created", nullable = false, columnDefinition = "default CURRENT_TIMESTAMP")
+    @Column(name = "created", nullable = false)
     public Date getCreated() {
+        if(created==null){
+            created=new Date();
+        }
         return created;
     }
 

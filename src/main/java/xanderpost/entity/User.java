@@ -130,7 +130,7 @@ public class User implements UserDetails, Serializable {
         return true;
     }
 
-    @Column(name = "enabled", columnDefinition = "default true")
+    @Column(name = "enabled")
     @JsonIgnore
     public boolean isEnabled() {
         return enabled;

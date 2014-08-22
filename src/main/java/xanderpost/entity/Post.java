@@ -92,8 +92,11 @@ public class Post implements Serializable {
         this.ratings = ratings;
     }
 
-    @Column(name = "created", nullable = false, columnDefinition = "default CURRENT_TIMESTAMP")
+    @Column(name = "created", nullable = false)
     public Date getCreated() {
+        if(created==null){
+            created=new Date();
+        }
         return created;
     }
 
@@ -101,7 +104,7 @@ public class Post implements Serializable {
         this.created = created;
     }
 
-    @Column(name = "last_edited", nullable = true, columnDefinition = "default CURRENT_TIMESTAMP")
+    @Column(name = "last_edited", nullable = true)
     public Date getLastEdited() {
         return lastEdited;
     }
