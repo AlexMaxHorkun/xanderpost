@@ -1,14 +1,10 @@
 package xanderpost.test;
 
-import org.hibernate.tool.hbm2ddl.SchemaExport;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import xanderpost.entity.Post;
@@ -30,6 +26,9 @@ public class PostServiceTest {
     private PostService postService;
     private UserService userService;
     private Validator validator;
+    private Set<UserRole> roleSet;
+    private Set<Post> postSet;
+    private Set<User> userSet;
 
     private ApplicationContext applicationContext;
 
@@ -73,7 +72,8 @@ public class PostServiceTest {
         this.userService = userService;
     }
 
-    private List<Post> generateValidPosts(List<User> users) {
+    private List<Post> generateValidPosts(Set<User> userSet) {
+        List<User> users = new ArrayList<User>(userSet);
         Random random = new Random();
         List<Post> posts = new ArrayList<Post>();
         for (int i = 0; i < 100; i++) {
@@ -94,14 +94,30 @@ public class PostServiceTest {
         return posts;
     }
 
-    private List<User> generateAuthors() {
-        List<User> users = new ArrayList<User>();
-        Set<UserRole> roles = new HashSet<UserRole>();
-        roles.add(new UserRole("ROLE_USER"));
-        for (int i = 0; i < 20; i++) {
-            users.add(new User("test" + (i + 1) + "@test.com", "123456", roles));
+    private Set<User> generateAuthors() {
+        if (userSet == null) {
+            Logger logger = Logger.getLogger(getClass().toString());
+            logger.info("Generating Users");
+            Set<User> users = new HashSet<User>();
+            Set<UserRole> roles = roleSet;
+            if (roles == null) {
+                logger.info("Generating UserRoles");
+                roles = new HashSet<UserRole>();
+                UserRole role = new UserRole("ROLE_USER");
+                userService.persistRole(role);
+                roles.add(role);
+                this.roleSet = roles;
+            }
+            for (int i = 0; i < 20; i++) {
+                User user = new User("test" + (i + 1) + "@test.com", "123456", roles);
+                users.add(user);
+                userService.persist(user);
+            }
+            this.userSet = users;
+            return users;
+        } else {
+            return userSet;
         }
-        return users;
     }
 
     @Test
@@ -121,13 +137,8 @@ public class PostServiceTest {
     }
 
     @Test
-    @DependsOn("testValidation")
     public void testPersist() {
-        List<User> authors = generateAuthors();
-        for (User u : authors) {
-            userService.persist(u);
-        }
-        for (Post p : generateValidPosts(authors)) {
+        for (Post p : generateValidPosts(generateAuthors())) {
             postService.persist(p);
         }
     }

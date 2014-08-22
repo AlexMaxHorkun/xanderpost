@@ -150,4 +150,9 @@ public class UserService {
     public boolean isEditableBy(User u, Post p) {
         return (u.equals(p.getAuthor()) || u.hasRole("ROLE_ADMIN"));
     }
+
+    @Transactional
+    public void persistRole(UserRole role) {
+        userRoleDao.persist(role);
+    }
 }

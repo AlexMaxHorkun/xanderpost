@@ -82,8 +82,8 @@ public class PostRating implements Serializable {
 
     @Column(name = "created", nullable = false)
     public Date getCreated() {
-        if(created==null){
-            created=new Date();
+        if (created == null) {
+            created = new Date();
         }
         return created;
     }

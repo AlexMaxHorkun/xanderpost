@@ -24,4 +24,8 @@ public class UserRoleDaoHbm implements UserRoleDaoInterface {
         Session orm = sessionFactory.getCurrentSession();
         return orm.createCriteria(UserRole.class).add(Restrictions.in("role", roles)).list();
     }
+
+    public void persist(UserRole r) {
+        sessionFactory.getCurrentSession().persist(r);
+    }
 }
