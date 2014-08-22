@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
+        <property name="url" value="jdbc:hsqldb:mem:xanderpostTest"/>
+        <property name="username" value="sa"/>
+        <property name="password" value=""/>
+    </bean>
+
+    <bean id="ORMSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" lazy-init="false">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="annotatedClasses">
+            <list>
+                <value>xanderpost.entity.Post</value>
+                <value>xanderpost.entity.User</value>
+                <value>xanderpost.entity.PostRating</value>
+                <value>xanderpost.security.UserRole</value>
+                <value>xanderpost.entity.readonly.UserInfo</value>
+                <value>xanderpost.entity.readonly.PostInfo</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <value>
+                hibernate.dialect=org.hibernate.dialect.HSQLDialect
+                hibernate.hbm2ddl.auto=create-drop
+                hibernate.show_sql=true
+                hibernate.cache.use_second_level_cache=false
+                hibernate.default_schema=PUBLIC
+            </value>
+        </property>
+    </bean>
+
+</beans>

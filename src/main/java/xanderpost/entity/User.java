@@ -30,6 +30,15 @@ public class User implements UserDetails, Serializable {
 
     private Set<PostRating> ratings;
 
+    public User() {
+    }
+
+    public User(String email, String password, Set<UserRole> roles) {
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
+
     @Id
     @Column(name = "id")
     @GeneratedValue
