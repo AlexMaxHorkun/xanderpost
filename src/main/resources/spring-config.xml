@@ -75,8 +75,10 @@
         <property name="viewResolvers">
             <list>
                 <bean class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
-                <bean class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
-                    <property name="basename" value="views"/>
+                <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+                    <property name="prefix" value="/WEB-INF/jsp/"/>
+                    <property name="suffix" value=".jsp"/>
                 </bean>
             </list>
         </property>
@@ -118,7 +120,7 @@
         <property name="postInfoDao" ref="postInfoDao"/>
     </bean>
 
-    <bean id="PostController" class="xanderpost.web.controller.PostController">
+    <bean id="PostController" class="xanderpost.web.controller.rest.PostController">
         <property name="postService" ref="postService"/>
         <property name="userService" ref="userService"/>
         <property name="validator" ref="validator"/>
@@ -141,7 +143,7 @@
         <property name="userService" ref="userService"/>
     </bean>
 
-    <bean id="userController" class="xanderpost.web.controller.UserController">
+    <bean id="userController" class="xanderpost.web.controller.rest.UserController">
         <property name="userService" ref="userService"/>
         <property name="validator" ref="validator"/>
     </bean>
@@ -175,5 +177,9 @@
 
     <bean id="postInfoDao" class="xanderpost.repository.PostInfoDaoHbm">
         <property name="sessionFactory" ref="ORMSessionFactory"/>
+    </bean>
+
+    <bean id="frontendController" class="xanderpost.web.controller.FrontendController">
+        <property name="postService" ref="postService"/>
     </bean>
 </beans>

@@ -1,4 +1,4 @@
-package xanderpost.web.controller;
+package xanderpost.web.controller.rest;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
