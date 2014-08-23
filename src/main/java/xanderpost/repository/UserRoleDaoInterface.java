@@ -10,4 +10,6 @@ public interface UserRoleDaoInterface {
     public List<UserRole> findByRoles(String[] roles);
 
     public void persist(UserRole r);
+
+    public void remove(UserRole r);
 }

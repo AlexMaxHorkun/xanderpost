@@ -28,4 +28,8 @@ public class UserRoleDaoHbm implements UserRoleDaoInterface {
     public void persist(UserRole r) {
         sessionFactory.getCurrentSession().persist(r);
     }
+
+    public void remove(UserRole r) {
+        sessionFactory.getCurrentSession().delete(r);
+    }
 }

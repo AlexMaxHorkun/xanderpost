@@ -3,6 +3,8 @@ package xanderpost.repository;
 import org.springframework.stereotype.Repository;
 import xanderpost.entity.User;
 
+import java.util.List;
+
 @Repository
 public interface UserDaoInterface {
     public enum FetchMode {
@@ -12,6 +14,8 @@ public interface UserDaoInterface {
     public User find(long id);
 
     public User find(long id, FetchMode fetchMode);
+
+    public List<User> findAll(int limit, int offset);
 
     public User findByEmail(String e);
 

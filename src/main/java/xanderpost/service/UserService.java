@@ -109,6 +109,11 @@ public class UserService {
         return u;
     }
 
+    @Transactional(readOnly = true)
+    public List<User> findAll() {
+        return userDao.findAll(0, 0);
+    }
+
     @Transactional
     public void remove(User u) {
         u.setEnabled(false);
@@ -154,5 +159,10 @@ public class UserService {
     @Transactional
     public void persistRole(UserRole role) {
         userRoleDao.persist(role);
+    }
+
+    @Transactional
+    public void removeRole(UserRole r) {
+        userRoleDao.remove(r);
     }
 }

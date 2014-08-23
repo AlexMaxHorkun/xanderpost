@@ -4,8 +4,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import xanderpost.entity.Post;
@@ -27,11 +25,6 @@ public class PostServiceTest {
     private PostService postService;
     private UserService userService;
     private Validator validator;
-    private Set<UserRole> roleSet;
-    private Set<Post> postSet;
-    private Set<User> userSet;
-
-    private ApplicationContext applicationContext;
 
     public PostServiceTest() {
     }
@@ -49,15 +42,6 @@ public class PostServiceTest {
         return validator;
     }
 
-    public ApplicationContext getApplicationContext() {
-        return applicationContext;
-    }
-
-    @Autowired
-    public void setApplicationContext(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
-
     @Autowired
     @Qualifier("validator")
     public void setValidator(Validator validator) {
@@ -73,7 +57,7 @@ public class PostServiceTest {
         this.userService = userService;
     }
 
-    private List<Post> generateValidPosts(Set<User> userSet) {
+    private List<Post> generateValidPosts(List<User> userSet) {
         List<User> users = new ArrayList<User>(userSet);
         Random random = new Random();
         List<Post> posts = new ArrayList<Post>();
@@ -84,7 +68,7 @@ public class PostServiceTest {
     }
 
     private List<Post> generateValidPosts() {
-        return generateValidPosts(generateAuthors());
+        return generateValidPosts(authorsList());
     }
 
     private List<Post> generateInvalidPosts() {
@@ -95,29 +79,35 @@ public class PostServiceTest {
         return posts;
     }
 
-    private Set<User> generateAuthors() {
-        if (userSet == null) {
-            Logger logger = Logger.getLogger(getClass().toString());
+    public void persistPosts(List<Post> ps) {
+        for (Post p : ps) {
+            postService.persist(p);
+        }
+    }
+
+    /**
+     * @return List of persisted users
+     */
+    public List<User> authorsList() {
+        Logger logger = Logger.getLogger(getClass().toString());
+        List<User> users = userService.findAll();
+        if (!users.isEmpty()) {
+            logger.info("Found users in the DB");
+            return users;
+        } else {
+            users = new ArrayList<User>();
+            Set<UserRole> roles = new HashSet<UserRole>();
+            logger.info("Generating UserRoles");
+            UserRole role = new UserRole("ROLE_USER");
+            userService.persistRole(role);
+            roles.add(role);
             logger.info("Generating Users");
-            Set<User> users = new HashSet<User>();
-            Set<UserRole> roles = roleSet;
-            if (roles == null) {
-                logger.info("Generating UserRoles");
-                roles = new HashSet<UserRole>();
-                UserRole role = new UserRole("ROLE_USER");
-                userService.persistRole(role);
-                roles.add(role);
-                this.roleSet = roles;
-            }
             for (int i = 0; i < 20; i++) {
                 User user = new User("test" + (i + 1) + "@test.com", "123456", roles);
                 users.add(user);
                 userService.persist(user);
             }
-            this.userSet = users;
             return users;
-        } else {
-            return userSet;
         }
     }
 
@@ -134,21 +124,6 @@ public class PostServiceTest {
         logger.info("Loaded " + posts.size() + " valid posts to validate");
         for (Post p : posts) {
             assertTrue(validator.validate(p).isEmpty());
-        }
-    }
-
-    @Test
-    public void testPersist() {
-        for (Post p : generateValidPosts(generateAuthors())) {
-            postService.persist(p);
-        }
-    }
-
-    @Test
-    public void testRemove(){
-        List<Post> posts=generateValidPosts();
-        for(Post p : posts){
-            postService.delete(p);
         }
     }
 }

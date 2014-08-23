@@ -1,10 +1,13 @@
 package xanderpost.repository;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import xanderpost.entity.User;
+
+import java.util.List;
 
 @Repository
 public class UserDaoHbm implements UserDaoInterface {
@@ -38,6 +41,17 @@ public class UserDaoHbm implements UserDaoInterface {
     public User findByEmail(String e) {
         Session orm = getSessionFactory().getCurrentSession();
         return (User) orm.createCriteria(User.class).add(Restrictions.eq("email", e)).uniqueResult();
+    }
+
+    public List<User> findAll(int limit, int offset) {
+        Query query = sessionFactory.getCurrentSession().createQuery("from User u");
+        if (limit > 0) {
+            query.setMaxResults(limit);
+        }
+        if (offset > 0) {
+            query.setFirstResult(offset);
+        }
+        return query.list();
     }
 
     public void persist(User u) {
