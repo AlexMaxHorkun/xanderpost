@@ -21,7 +21,7 @@ public class FrontendController {
 
     @RequestMapping(value = {"/", "/posts"}, method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView homepageAction(ModelAndView viewModel) {
-        viewModel.addObject("posts", postService.findAll());
+        viewModel.addObject("posts", postService.findAllInfo());
         viewModel.setViewName("homepage");
         return viewModel;
     }
