@@ -7,8 +7,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Subselect("select p.id, p.title, p.text, p.created, p.last_edited, p.author, avg(r.rate) as avg_rating, count(distinct r.id) as ratings_count "
-        + "from Post p left join PostRating r on r.post_id=p.id group by p.id")
+@Subselect("select p.id, p.title, p.text, p.created, p.last_edited, p.author, avg(r.rate) as avg_rating, count(distinct r.id) as ratings_count, count(distinct pw.id) as views_count "
+        + "from Post p left join PostRating r on r.post_id=p.id left join PostView pw on p.id=pw.post group by p.id")
 @Synchronize({"Post", "PostRatings"})
 public class PostInfo {
     private long id;
@@ -26,6 +26,8 @@ public class PostInfo {
     private Float avgRating;
 
     private int ratingsCount;
+
+    private int viewsCount;
 
     @Id
     @Column(name = "id")
@@ -99,5 +101,14 @@ public class PostInfo {
 
     public void setRatingsCount(int ratingsCount) {
         this.ratingsCount = ratingsCount;
+    }
+
+    @Column(name = "views_count")
+    public int getViewsCount() {
+        return viewsCount;
+    }
+
+    public void setViewsCount(int viewsCount) {
+        this.viewsCount = viewsCount;
     }
 }

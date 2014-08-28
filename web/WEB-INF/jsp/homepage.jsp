@@ -7,7 +7,7 @@
 <ul>
     <% for(PostInfo p: (List<PostInfo>)request.getAttribute("posts")){ %>
     <li>
-        <%= p.getTitle() %> by <%= p.getAuthor().getEmail() %> created at <%= p.getCreated() %>
+        <%= p.getTitle() %> by <%= p.getAuthor().getEmail() %> created at <%= p.getCreated() %> having <%= p.getViewsCount() %> views
         <br>
         rated by <%= p.getRatingsCount() %> users with average rating <%= (p.getAvgRating()==null)? 0 : p.getAvgRating() %>
     </li>

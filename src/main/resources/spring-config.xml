@@ -44,6 +44,7 @@
                 <value>xanderpost.security.UserRole</value>
                 <value>xanderpost.entity.readonly.UserInfo</value>
                 <value>xanderpost.entity.readonly.PostInfo</value>
+                <value>xanderpost.entity.PostView</value>
             </list>
         </property>
         <property name="hibernateProperties">

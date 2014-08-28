@@ -30,6 +30,8 @@ public class User implements UserDetails, Serializable {
 
     private Set<PostRating> ratings;
 
+    private List<PostView> views;
+
     public User() {
     }
 
@@ -170,5 +172,15 @@ public class User implements UserDetails, Serializable {
             return ((User) obj).getId() == getId();
         }
         return false;
+    }
+
+    @OneToMany(targetEntity = PostView.class, fetch = FetchType.LAZY, mappedBy = "user", orphanRemoval = true)
+    @OrderBy("time")
+    public List<PostView> getViews() {
+        return views;
+    }
+
+    public void setViews(List<PostView> views) {
+        this.views = views;
     }
 }

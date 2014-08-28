@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -25,6 +26,8 @@ public class Post implements Serializable {
     private Date created;
 
     private Date lastEdited;
+
+    private List<PostView> views;
 
     public Post() {
     }
@@ -111,5 +114,15 @@ public class Post implements Serializable {
 
     public void setLastEdited(Date lastEdited) {
         this.lastEdited = lastEdited;
+    }
+
+    @OneToMany(targetEntity = PostView.class, orphanRemoval = true, mappedBy = "post", fetch = FetchType.LAZY)
+    @OrderBy("time")
+    public List<PostView> getViews() {
+        return views;
+    }
+
+    public void setViews(List<PostView> views) {
+        this.views = views;
     }
 }
